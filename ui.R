@@ -18,7 +18,7 @@ shinyUI(fluidPage(
   wellPanel(
   	fluidRow(
   	column(4, 
-  		helpText(h4("Physical Loading Parameters")),
+  		h3("Physical Loading Parameters")),
   		
   		sliderInput("AtmDepRate",
   		     	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
@@ -39,7 +39,7 @@ shinyUI(fluidPage(
   			    "Per capita human N excretion rate (kg N/pp/yr):",
   			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)),
   	column(4,
-  	       h4("Retention Parameters"),
+  	       h3("Retention Parameters"),
   		sliderInput("NtransNatVeg",
   			    "% Atmospheric Deposition NOT retained in natural vegetation",
   			    min = 0, max = 100, value = 35),
@@ -59,7 +59,7 @@ shinyUI(fluidPage(
   			    "% Atmospheric Deposition NOT retained in impervious surfaces:",
   			    min = 0, max = 100, value = 38)),
   	column(4, 
-  		h4("Transportation Parameters"),
+  		h3("Transportation Parameters"),
   		sliderInput("PercentHomes",
   			    "% of homes that use fertilizer",
   			    min = 0, max = 100, value= 49),
@@ -89,7 +89,7 @@ shinyUI(fluidPage(
   			    min = 0, max = 100, value= 49),
   		sliderInput("LawnArea",
   			    "Average lawn size (hectares):",
-  			    min= 0.00, max= 0.1, value= 0.05, round= FALSE)))
+  			    min= 0.00, max= 0.1, value= 0.05, round= FALSE))
   ),
      fluidRow(
   	column(12, 
