@@ -18,7 +18,7 @@ shinyUI(fluidPage(
   wellPanel(
   	fluidRow(
   	column(4, 
-  		h3("Physical Loading Parameters")),
+  		h3("Physical Loading Parameters"),
   		
   		sliderInput("AtmDepRate",
   		     	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
@@ -90,9 +90,12 @@ shinyUI(fluidPage(
   		sliderInput("LawnArea",
   			    "Average lawn size (hectares):",
   			    min= 0.00, max= 0.1, value= 0.05, round= FALSE))
+  )
   ),
-     fluidRow(
+  wellPanel(fluidRow(
   	column(12, 
   		h1(textOutput("text1"), height= "600px"))
-     )
-))
+  	)
+  	)
+)
+)
