@@ -33,16 +33,19 @@ AtmImperv <- function(){
 }
 #e
 AtmWetlands <- function(){
-	return(input$AtmDepRate *
+	return(input$AtmDepRate * input$
 }
 #f
 AtmPonds <- function(){
-	return(input$AtmDepRate *
+	return(input$AtmDepRate * input$PondsArea * input$ThroughAquifer)
 }
 ## Total N load to estuary sourced from Atmospheric Deposition
 TotalLoadAtmospheric <- function(){
 	return(AtmNatVeg() + AtmTurf() + AtmAg() + AtmImperv() + AtmWetlands() + AtmPonds())
 }
+
+
+
 ##Via fertilizer application
 
 #g
@@ -61,14 +64,11 @@ FertGolf <- function(){
 
 
 
-N.load(1,2,3,4)
-
-
 shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
 
-	output$text1 <- renderText({
-		paste("Your total load is ", input$AtmDepRate + input$NtransNatVeg)
+	output$Load1 <- renderText({
+		paste("Your total load is ", TotalLoadAtmospheric())
 	})
   }
  )

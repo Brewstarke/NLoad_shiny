@@ -16,6 +16,7 @@ shinyUI(fluidPage(
 
   # Sidebar with a slider input for number of bins
   wellPanel(
+#----
   	fluidRow(
   	column(3, 
   		h3("Physical Loading Parameters"),
@@ -64,43 +65,48 @@ shinyUI(fluidPage(
   			    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
   			    min = 0, max = 100, value = 61)
   		),
+# ----
   	column(3, 
   		h3("Transportation Parameters"),
   		
   		sliderInput("PercentHomes",
   			    "% of homes that use fertilizer",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransTurf",
   			    "% N fertilizer transported from turf soils",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransAg",
   			    "% fertilizer N transported from Agriculture",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransRec",
   			    "% fertilizer N transported from recreational soils",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransSeptic",
   			    "% fertilizer N transported from septic tanks",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransLeach",
   			    "% fertilizer N transported from leaching fields",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransSepticPlume",
   			    "% fertilizer N transported from septic plumes",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransVandose",
   			    "% fertilizer N transported from vandose zone",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value = 49),
   		sliderInput("TransAquifer",
   			    "% fertilizer N transported from aquifer",
-  			    min = 0, max = 100, value= 49)
+  			    min = 0, max = 100, value = 49),
+  		sliderInput("ThroughAquifer",
+  			    "Throughput to the aquifer",
+  			    min = 0, max = 100, value = 44)
   		),
-  	column(3,
+#----
+	column(3,
   	       h3("Geographic Parameters"),
   	       
-  		sliderInput("LawnArea",
+  		numericInput("LawnArea",
   			    "Average lawn size (hectares):",
-  			    min= 0.00, max= 0.1, value= 0.05, round= FALSE),
+  			    min= 0.00, max= NA, value= 0.05),
   		numericInput("NatVegArea",
   			    "area of naturally vegetated land",
   			    value= NA, min = 0, max = NA),
@@ -121,14 +127,17 @@ shinyUI(fluidPage(
   			     value= NA, min = 0, max = NA),
   		numericInput("ImpervArea",
   			     "Total area of impervious surfaces such as roads/parking lots/runways (ha)",
-  			     value = NA, min = 0, max = NA)
+  			     value = NA, min = 0, max = NA),
+  		numericInput("PondsArea",
+  			     "Total area of freshwater ponds (ha)",
+  			     value= NA, min = 0, max = NA)
   		)
   )
   ),
-  wellPanel(fluidRow(
+# ----
+fluidRow(
   	column(12, 
-  		h1(textOutput("text1"), height= "600px"))
+  		h1(textOutput("Load1")))
   	)
   	)
-)
 )
