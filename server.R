@@ -68,15 +68,15 @@ shinyServer( # this will be run each time a user changes something.
 		}
 		
 
-	output$Load1 <- renderText({
-		paste("Your total load is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds(), "KG N/ha/year")
-	})
+# 	output$Load1 <- renderText({
+# 		paste("Your total load is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds(), "KG N/ha/year")
+# 	})
 	output$TotalLoad <- renderText({
-		paste("The total load under this scenario is ", TotalLoadAtmospheric(), "KG N/ha/year")
+		paste("The total load under this scenario is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds(), "KG N/ha/year")
 	})
-	ouput$AtmAg <- renderText({
-		paste("Ag load is ", AtmAg())
-	})
+# 	ouput$AtmAg <- renderText({
+# 		paste("Ag load is ", AtmAg())
+# 	})
 	
 }
 )
