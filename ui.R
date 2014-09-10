@@ -17,7 +17,7 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins
   wellPanel(
   	fluidRow(
-  	column(4, 
+  	column(3, 
   		h3("Physical Loading Parameters"),
   		
   		sliderInput("AtmDepRate",
@@ -37,9 +37,11 @@ shinyUI(fluidPage(
   			    min= 0, max= 200, value= 115, ticks= TRUE),
   		sliderInput("HumanExcretion",
   			    "Per capita human N excretion rate (kg N/pp/yr):",
-  			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)),
-  	column(4,
+  			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)
+  		),
+  	column(3,
   	       h3("Retention Parameters"),
+  	       
   		sliderInput("NtransNatVeg",
   			    "% Atmospheric Deposition NOT retained in natural vegetation",
   			    min = 0, max = 100, value = 35),
@@ -57,9 +59,14 @@ shinyUI(fluidPage(
   			    min = 0, max = 100, value = 38),
   		sliderInput("NtransImperv",
   			    "% Atmospheric Deposition NOT retained in impervious surfaces:",
-  			    min = 0, max = 100, value = 38)),
-  	column(4, 
+  			    min = 0, max = 100, value = 38),
+  		sliderInput("DeNit",
+  			    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
+  			    min = 0, max = 100, value = 61)
+  		),
+  	column(3, 
   		h3("Transportation Parameters"),
+  		
   		sliderInput("PercentHomes",
   			    "% of homes that use fertilizer",
   			    min = 0, max = 100, value= 49),
@@ -86,10 +93,36 @@ shinyUI(fluidPage(
   			    min = 0, max = 100, value= 49),
   		sliderInput("TransAquifer",
   			    "% fertilizer N transported from aquifer",
-  			    min = 0, max = 100, value= 49),
+  			    min = 0, max = 100, value= 49)
+  		),
+  	column(3,
+  	       h3("Geographic Parameters"),
+  	       
   		sliderInput("LawnArea",
   			    "Average lawn size (hectares):",
-  			    min= 0.00, max= 0.1, value= 0.05, round= FALSE))
+  			    min= 0.00, max= 0.1, value= 0.05, round= FALSE),
+  		numericInput("NatVegArea",
+  			    "area of naturally vegetated land",
+  			    value= NA, min = 0, max = NA),
+  		numericInput("TurfArea",
+  			     "Turf Area- needs better description",
+  			     value= NA, min = 0, max = NA),
+  		numericInput("AgArea", 
+  			     "Agricultural area- needs better description",
+  			     value= NA, min = 0, max = NA),
+  		numericInput("GolfArea",
+  			     "Golf course area (ha)",
+  			     value= NA, min = 0, max = NA),
+  		numericInput("RoofArea",
+  			     "Total area of roofs",
+  			     value= NA, min = 0, max = NA),
+  		numericInput("DrivewayArea",
+  			     "Total area of driveways",
+  			     value= NA, min = 0, max = NA),
+  		numericInput("ImpervArea",
+  			     "Total area of impervious surfaces such as roads/parking lots/runways (ha)",
+  			     value = NA, min = 0, max = NA)
+  		)
   )
   ),
   wellPanel(fluidRow(
