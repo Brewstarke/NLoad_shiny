@@ -9,7 +9,7 @@ library(shiny)
 library(leaflet)
 
 shinyUI(navbarPage("N-Load",
-
+		   
   # Application title
   #tags$h2("N-Load Model v.1.0"),
   
