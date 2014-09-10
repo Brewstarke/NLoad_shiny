@@ -11,6 +11,7 @@ shinyUI(fluidPage(
 
   # Application title
   tags$h2("N-Load Model v.1.0"),
+  tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
   p("Version adapted to Shiny"),
   hr(),
 
@@ -23,19 +24,19 @@ shinyUI(fluidPage(
   		
   		sliderInput("AtmDepRate",
   		     	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
-  		     	    min = 12, max = 17, value = 15.1, round= FALSE, step = NULL), 
+  		     	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.01), 
   		sliderInput("FertLawns",
   			    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
-  			    min= 50, max= 150, value= 104, ticks= TRUE),
+  			    min= 50, max= 150, value= 104, ticks= FALSE),
   		sliderInput("FertAg", 
   			    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
-  			    min= 50, max= 150, value= 136, ticks= TRUE),
+  			    min= 50, max= 150, value= 136, ticks= FALSE),
   		sliderInput("FertVineyards", 
   			    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
-  			    min= 0, max= 20, value= 8.41, ticks= TRUE),
+  			    min= 0, max= 20, value= 8.41, ticks= FALSE),
   		sliderInput("FertRec", 
   			    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
-  			    min= 0, max= 200, value= 115, ticks= TRUE),
+  			    min= 0, max= 200, value= 115, ticks= FALSE),
   		sliderInput("HumanExcretion",
   			    "Per capita human N excretion rate (kg N/pp/yr):",
   			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)
@@ -109,7 +110,7 @@ shinyUI(fluidPage(
   	       
   		numericInput("LawnArea",
   			    "Average lawn size (hectares):",
-  			    min= 0.00, max= NA, value= 0.05),
+  			    min= 0.00, max= 20, value= 0.05),
   		numericInput("NatVegArea",
   			    "area of naturally vegetated land",
   			    value= NA, min = 0, max = NA),
