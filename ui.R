@@ -25,7 +25,7 @@ shinyUI(navbarPage("N-Load",
   		
   		sliderInput("AtmDepRate",
   		     	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
-  		     	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.01), 
+  		     	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.1), 
   		sliderInput("FertLawns",
   			    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
   			    min= 50, max= 150, value= 104, ticks= FALSE),
@@ -40,7 +40,7 @@ shinyUI(navbarPage("N-Load",
   			    min= 0, max= 200, value= 115, ticks= FALSE),
   		sliderInput("HumanExcretion",
   			    "Per capita human N excretion rate (kg N/pp/yr):",
-  			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)
+  			    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1)
   		)
   	)
 ),
@@ -115,46 +115,66 @@ tabPanel("Transport Parameters",
   		)
 	 )
 ),
+tabPanel("Wastewater Parameters",
+	 fluidRow(
+	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
+	 	column(3,
+	 	       h6("Human Factors"),
+	 	       
+	 	       numericInput("HumanLoad",
+	 	       	     "Human N released per year (kg??)", #Need to confirm units
+	 	       	     min = 0.00, max = NA, value = 4.80
+	 	       	),
+	 	       sliderInput("HouseSize",
+	 	       	     "Average Household Size (# people)",
+	 	       	     min= 0.00, max = 10.00, value = 2.1
+	 	       	),
+	 	       numericInput()
+	 	       )
+	 	)
+	 
+	 ),
 #----
 tabPanel("Geographic Parameters - Results", 
 	 fluidRow(
 	 	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
 	 	column(3,
-  	       	h3("Geographic Parameters"),
+	 	       h3("Geographic Parameters"),
   	       
   		numericInput("LawnArea",
   			    "Average lawn size (hectares):",
   			    min= 0.00, max= 20, value= 0.05),
   		numericInput("NatVegArea",
   			    "area of naturally vegetated land",
-  			    value= NA, min = 0, max = NA),
+  			    value= NA, min = 0.0, max = NA),
   		numericInput("TurfArea",
   			     "Turf Area- needs better description",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("AgArea", 
   			     "Agricultural area- needs better description",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("GolfArea",
   			     "Golf course area (ha)",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("RoofArea",
   			     "Total area of roofs",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("DrivewayArea",
   			     "Total area of driveways",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("ImpervArea",
   			     "Total area of impervious surfaces such as roads/parking lots/runways (ha)",
-  			     value = NA, min = 0, max = NA),
+  			     value = NA, min = 0.0, max = NA),
   		numericInput("PondsArea",
   			     "Total area of freshwater ponds (ha)",
-  			     value= NA, min = 0, max = NA),
+  			     value= NA, min = 0.0, max = NA),
   		numericInput("WetlandsArea",
   			     "Total area of wetlands",
-  			     value = NA, min = 0, max = NA)
+  			     value = NA, min = 0.0, max = NA)
   		),
-	 	column(9, 
-	 	       h1(textOutput("Load1")))
+	 	column(6, 
+	 	       h4(textOutput("Load1")),
+	 	       h4(textOutput("TotalLoad")))
 	 )
 	 )
 	 
