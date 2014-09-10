@@ -7,16 +7,16 @@
 
 library(shiny)
 
-shinyUI(fluidPage(
+shinyUI(navbarPage("N-Load",
 
   # Application title
-  tags$h2("N-Load Model v.1.0"),
-  tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
-  p("Version adapted to Shiny"),
-  hr(),
+  #tags$h2("N-Load Model v.1.0"),
+  
+#   p("Version adapted to Shiny"),
+#   hr(),
 
   # Sidebar with a slider input for number of bins
-  wellPanel(
+  tabPanel("Physical Loading Parameters",
 #----
   	fluidRow(
   	column(3, 
@@ -40,8 +40,12 @@ shinyUI(fluidPage(
   		sliderInput("HumanExcretion",
   			    "Per capita human N excretion rate (kg N/pp/yr):",
   			    min= 0, max= 10, value= 4.8, round= FALSE, step= NULL)
-  		),
-  	column(3,
+  		)
+  	)
+),
+tabPanel("Retention Parameters",
+	 fluidRow(
+	 	column(3,
   	       h3("Retention Parameters"),
   	       
   		sliderInput("NtransNatVeg",
@@ -65,9 +69,13 @@ shinyUI(fluidPage(
   		sliderInput("DeNit",
   			    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
   			    min = 0, max = 100, value = 61)
-  		),
+  		)
+	 )
+),
 # ----
-  	column(3, 
+tabPanel("Transport Parameters",
+	 fluidRow(
+	 	column(3, 
   		h3("Transportation Parameters"),
   		
   		sliderInput("PercentHomes",
@@ -103,10 +111,15 @@ shinyUI(fluidPage(
   		sliderInput("ThroughAquiferWetlands",
   			    "Throughput to the aquifer from wetlands",
   			    min = 0, max = 100, value= 22)
-  		),
+  		)
+	 )
+),
 #----
-	column(3,
-  	       h3("Geographic Parameters"),
+tabPanel("Geographic Parameters - Results", 
+	 fluidRow(
+	 	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
+	 	column(3,
+  	       	h3("Geographic Parameters"),
   	       
   		numericInput("LawnArea",
   			    "Average lawn size (hectares):",
@@ -138,13 +151,10 @@ shinyUI(fluidPage(
   		numericInput("WetlandsArea",
   			     "Total area of wetlands",
   			     value = NA, min = 0, max = NA)
-  		)
-  )
-  ),
-# ----
-fluidRow(
-  	column(12, 
-  		h1(textOutput("Load1")))
-  	)
-  	)
+  		),
+	 	column(9, 
+	 	       h1(textOutput("Load1")))
+	 )
+	 )
+)
 )
