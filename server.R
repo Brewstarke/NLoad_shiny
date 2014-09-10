@@ -25,19 +25,19 @@ AtmTurf <- function(){
 }
 #c
 AtmAg <- function(){
-	return(input$AtmDepRate * input$AgArea * input$TransAg)
+	return(input$AtmDepRate * input$AgArea * input$NTransAg)
 }
 #d
 AtmImperv <- function(){
-	return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea))) #Need help with this formula
+	return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea)) #Need help with this formula
 }
 #e
 AtmWetlands <- function(){
-	return(input$AtmDepRate * input$
+	return(input$AtmDepRate * input$WetlandsArea)
 }
 #f
 AtmPonds <- function(){
-	return(input$AtmDepRate * input$PondsArea * input$ThroughAquifer)
+	return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds)
 }
 ## Total N load to estuary sourced from Atmospheric Deposition
 TotalLoadAtmospheric <- function(){
@@ -68,7 +68,7 @@ shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
 
 	output$Load1 <- renderText({
-		paste("Your total load is ", TotalLoadAtmospheric())
+		paste("Your total load is ", AtmNatVeg())
 	})
   }
  )

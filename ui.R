@@ -95,10 +95,13 @@ shinyUI(fluidPage(
   			    min = 0, max = 100, value = 49),
   		sliderInput("TransAquifer",
   			    "% fertilizer N transported from aquifer",
-  			    min = 0, max = 100, value = 49),
-  		sliderInput("ThroughAquifer",
-  			    "Throughput to the aquifer",
-  			    min = 0, max = 100, value = 44)
+  			    min = 0, max = 100, value = 61),
+  		sliderInput("ThroughAquiferPonds",
+  			    "Throughput to the aquifer from ponds",
+  			    min = 0, max = 100, value = 44),
+  		sliderInput("ThroughAquiferWetlands",
+  			    "Throughput to the aquifer from wetlands",
+  			    min = 0, max = 100, value= 22)
   		),
 #----
 	column(3,
@@ -130,7 +133,10 @@ shinyUI(fluidPage(
   			     value = NA, min = 0, max = NA),
   		numericInput("PondsArea",
   			     "Total area of freshwater ponds (ha)",
-  			     value= NA, min = 0, max = NA)
+  			     value= NA, min = 0, max = NA),
+  		numericInput("WetlandsArea",
+  			     "Total area of wetlands",
+  			     value = NA, min = 0, max = NA)
   		)
   )
   ),
