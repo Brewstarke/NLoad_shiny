@@ -71,6 +71,6 @@ shinyServer( # this will be run each time a user changes something.
 	output$Load1 <- renderText({
 		paste("Your total load is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds())
 	})
-  }
- )
+}
+)
 

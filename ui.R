@@ -6,6 +6,7 @@
 #
 
 library(shiny)
+library(leaflet)
 
 shinyUI(navbarPage("N-Load",
 
@@ -156,5 +157,6 @@ tabPanel("Geographic Parameters - Results",
 	 	       h1(textOutput("Load1")))
 	 )
 	 )
+	 
 )
 )
