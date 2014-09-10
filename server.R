@@ -29,7 +29,7 @@ AtmAg <- function(){
 }
 #d
 AtmImperv <- function(){
-	return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea)))
+	return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea))) #Need help with this formula
 }
 #e
 AtmWetlands <- function(){
