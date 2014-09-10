@@ -118,18 +118,35 @@ tabPanel("Transport Parameters",
 tabPanel("Wastewater Parameters",
 	 fluidRow(
 	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
-	 	column(3,
+	 	column(4,
 	 	       h6("Human Factors"),
 	 	       
 	 	       numericInput("HumanLoad",
 	 	       	     "Human N released per year (kg??)", #Need to confirm units
-	 	       	     min = 0.00, max = NA, value = 4.80
-	 	       	),
+	 	       	     min = 0.00, max = 10.00, value = 4.80),
 	 	       sliderInput("HouseSize",
 	 	       	     "Average Household Size (# people)",
-	 	       	     min= 0.00, max = 10.00, value = 2.1
-	 	       	),
-	 	       numericInput()
+	 	       	     min= 0.00, max = 10.00, value = 2.10, round = FALSE, step = 0.05),
+	 	       numericInput("NumbHomesSeptic",
+	 	       	     "Number of homes with Septic Systems",
+	 	       	     min= 0, max = NA, value = NA),
+	 	       numericInput("NumbHomesCess",
+	 	       	     "Number of homes with Cesspool",
+	 	       	     min= 0, max = NA, value = NA),
+	 	       #k and i
+	 	       h6("Septic System & Cesspool Efficiencies"),
+	 	       sliderInput("NotLostSpetic",
+	 	       	    "% NOT lost in septic tank",
+	 	       	    min= 0, max = 100, value = 94),
+	 	       sliderInput("NotLostLeach",
+	 	       	    "% NOT lost in leaching fields",
+	 	       	    min = 0, max = 100, value = 65),
+	 	       sliderInput("NotLostPlume",
+	 	       	    "% NOT lost in septic plume",
+	 	       	    min = 0, max = 100, value = 66),
+	 	       sliderInput("NotLostAquifer",
+	 	       	    "% NOT lost in aquifer",
+	 	       	    min = 0, max = 100, value = 65)
 	 	       )
 	 	)
 	 
