@@ -51,25 +51,25 @@ tabPanel("Retention Parameters",
   	       
   		sliderInput("NtransNatVeg",
   			    "% Atmospheric Deposition NOT retained in natural vegetation",
-  			    min = 0, max = 100, value = 35),
+  			    min = 0.00, max = 1.00, value = 0.35),
   		sliderInput("NtransTurf",
   			    "% Atmospheric Deposition NOT retained in turf soils:",
-  			    min = 0, max = 100, value = 38),
+  			    min = 0.00, max = 1.00, value = 0.38),
   		sliderInput("NtransAg",
   			    "% Atmospheric Deposition NOT retained in agriculture soils:",
-  			    min = 0, max = 100, value = 38),
+  			    min = 0.00, max = 1.00, value = 0.38),
     	       	sliderInput("NtransWetlands",
   			    "% Atmospheric Deposition NOT retained in wetlands:",
-  			    min = 0, max = 100, value = 38),
+  			    min = 0.00, max = 1.00, value = 0.38),
   		sliderInput("NtransPonds",
   			    "% Atmospheric Deposition NOT retained in ponds:",
-  			    min = 0, max = 100, value = 38),
+  			    min = 0.00, max = 1.00, value = 0.38),
   		sliderInput("NtransImperv",
   			    "% Atmospheric Deposition NOT retained in impervious surfaces:",
-  			    min = 0, max = 100, value = 38),
+  			    min = 0.00, max = 1.00, value = 0.38),
   		sliderInput("DeNit",
   			    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
-  			    min = 0, max = 100, value = 61)
+  			    min = 0.00, max = 1.00, value = 0.61)
   		)
 	 )
 ),
@@ -81,37 +81,37 @@ tabPanel("Transport Parameters",
   		
   		sliderInput("PercentHomes",
   			    "% of homes that use fertilizer",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransTurf",
   			    "% N fertilizer transported from turf soils",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransAg",
   			    "% fertilizer N transported from Agriculture",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransRec",
   			    "% fertilizer N transported from recreational soils",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransSeptic",
   			    "% fertilizer N transported from septic tanks",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransLeach",
   			    "% fertilizer N transported from leaching fields",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransSepticPlume",
   			    "% fertilizer N transported from septic plumes",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransVandose",
   			    "% fertilizer N transported from vandose zone",
-  			    min = 0, max = 100, value = 49),
+  			    min = 0.00, max = 1.00, value = 0.49),
   		sliderInput("TransAquifer",
   			    "% fertilizer N transported from aquifer",
-  			    min = 0, max = 100, value = 61),
+  			    min = 0.00, max = 1.00, value = 0.61),
   		sliderInput("ThroughAquiferPonds",
   			    "Throughput to the aquifer from ponds",
-  			    min = 0, max = 100, value = 44),
+  			    min = 0.00, max = 1.00, value = 0.44),
   		sliderInput("ThroughAquiferWetlands",
   			    "Throughput to the aquifer from wetlands",
-  			    min = 0, max = 100, value= 22)
+  			    min = 0.00, max = 1.00, value= 0.22)
   		)
 	 )
 ),
@@ -133,20 +133,28 @@ tabPanel("Wastewater Parameters",
 	 	       numericInput("NumbHomesCess",
 	 	       	     "Number of homes with Cesspool",
 	 	       	     min= 0, max = NA, value = NA),
-	 	       #k and i
+	 	       
+	 	       #k l and m
 	 	       h6("Septic System & Cesspool Efficiencies"),
+	 	       
 	 	       sliderInput("NotLostSpetic",
 	 	       	    "% NOT lost in septic tank",
-	 	       	    min= 0, max = 100, value = 94),
+	 	       	    min= 0.00, max = 1.00, value = 0.94),
 	 	       sliderInput("NotLostLeach",
 	 	       	    "% NOT lost in leaching fields",
-	 	       	    min = 0, max = 100, value = 65),
+	 	       	    min = 0.00, max = 1.00, value = 0.65),
 	 	       sliderInput("NotLostPlume",
 	 	       	    "% NOT lost in septic plume",
-	 	       	    min = 0, max = 100, value = 66),
+	 	       	    min = 0.00, max = 1.00, value = 0.66),
 	 	       sliderInput("NotLostAquifer",
 	 	       	    "% NOT lost in aquifer",
-	 	       	    min = 0, max = 100, value = 65)
+	 	       	    min = 0.00, max = 1.00, value = 0.65),
+	 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range
+	 	       	    "Average annual wastewater N concentration (kg N/L)",
+	 	       	    min = 0, max = 1000, value = 100),
+	 	       sliderInput("TotAnFlow",   # need to reformat- numbers too large
+	 	       	    "Total average annual flow (L)",
+	 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
 	 	       )
 	 	)
 	 
@@ -190,10 +198,12 @@ tabPanel("Geographic Parameters - Results",
   			     value = NA, min = 0.0, max = NA)
   		),
 	 	column(6, 
-	 	       h4(textOutput("Load1")),
-	 	       h4(textOutput("TotalLoad")))
+	 	       h4(textOutput("TotalLoadAtmosphericOut")),
+	 	       h4(textOutput("TotalFertLoadOut")),
+	 	       h4(textOutput("TotalWasteWaterLoad")),
+	 	       h4(textOutput("NLoadTotalOut"))
+	 	)
 	 )
-	 )
+)
+))
 	 
-)
-)
