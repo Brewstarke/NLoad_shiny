@@ -1,12 +1,4 @@
 
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
-# Load required libraries
-
 library(shiny)
 
 
@@ -14,40 +6,36 @@ library(shiny)
 # N-load backbone formula
 
 
-# Define each part of the loading formula
-
-
-
 shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
 		#a
 		AtmNatVeg <- function(){
-			return(input$AtmDepRate * input$NatVegArea * input$NtransNatVeg)
+			return(input$AtmDepRate * input$NatVegArea * input$NtransNatVeg) %>% round(1)
 		}
 		#b
 		AtmTurf <- function(){
-			return(input$AtmDepRate * input$TurfArea * input$TransTurf)
+			return(input$AtmDepRate * input$TurfArea * input$TransTurf) %>% round(1)
 		}
 		#c
-		AtmAg <- function(){
-			return(input$AtmDepRate * input$AgArea * input$NTransAg)
+		AtmAg <- function(){  ## Not working!
+			return(input$AtmDepRate * input$AgArea * input$NtransAg) %>% round(1)
 		}
 		#d
 		AtmImperv <- function(){
-			return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea)) #Need help with this formula
+			return((input$AtmDepRate * (input$RoofArea + input$DrivewayArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea)) %>% round(1) #Need help with this formula
 		}
 		#e
 		AtmWetlands <- function(){
-			return(input$AtmDepRate * input$WetlandsArea)
+			return(input$AtmDepRate * input$WetlandsArea) %>% round(1)
 		}
 		#f
 		AtmPonds <- function(){
-			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds)
+			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds) %>% round(1)
 		}
 	
 		## Total N load to estuary sourced from Atmospheric Deposition
 		TotalLoadAtmospheric <- function(){
-			return(AtmNatVeg() + AtmTurf() + AtmAg() + AtmImperv() + AtmWetlands() + AtmPonds())
+			return(AtmNatVeg() + AtmTurf() + AtmAg() + AtmImperv() + AtmWetlands() + AtmPonds()) %>% round(1)
 		}
 		
 		
@@ -56,27 +44,55 @@ shinyServer( # this will be run each time a user changes something.
 		
 		#g
 		FertTurf <- function(){
-			return(input$FertLawns * input$LawnArea * input$PercentHomes * input$DeNitTurf)
+			return(input$FertLawns * input$LawnArea * input$PercentHomes * input$DeNit) %>% round(1)
 		}
 		#h 	
 		FertAg <- function(){
-			return(input$FertAg * input$AgArea * input$DeNit)
+			return(input$FertAg * input$AgArea * input$DeNit) %>% round(1)
 		}
 		#i
 		FertGolf <- function(){
-			return(input$Fert)
+			return(input$Fert * input$GolfArea * input$Denit) %>% round(1)
 		}
 		
+		TotalFertLoad <- function(){
+			return(FertTurf() + FertAg() + FertGolf()) %>% round(1)
+		}
+		
+		#j
+		SurfaceLoad <- function(){
+			return((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
+		}
+		#k
+		SepticLoad <- function(){
+			return(input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		}
+		#l
+		CesspoolLoad <- function(){
+			return(input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		}
+		#m
+		WasteWaterLoad <- function(){
+			return(input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
+		}
+		
+		#Nitrogen Loading to Estuary
+		NLoadTotal <- function(){
+			return(SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1)
+		}
 
-# 	output$Load1 <- renderText({
-# 		paste("Your total load is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds(), "KG N/ha/year")
-# 	})
-	output$TotalLoad <- renderText({
-		paste("The total load under this scenario is ", AtmNatVeg() + AtmTurf() + AtmImperv() + AtmWetlands() + AtmPonds(), "KG N/ha/year")
+	output$TotalLoadAtmosphericOut <- renderText({
+		paste("Your total atmospheric load is ", as.character(TotalLoadAtmospheric()) ,"KG N/ha/year")
 	})
-# 	ouput$AtmAg <- renderText({
-# 		paste("Ag load is ", AtmAg())
-# 	})
+	output$TotalFertLoadOut <- renderText({
+		paste("The total load from fertilizer under this scenario is ", as.character(TotalFertLoad()), "KG N/ha/year")
+	})
+	output$TotalWasteWaterLoad <- renderText({
+		paste("The total Nitrogen load from wastewater is", as.character(WasteWaterLoad()), "KG N/ha/year")
+	})
+	ouput$NLoadTotalOut <- renderText({
+		paste("Nitrogen load to the estuary ", as.character(NLoadTotal()), "kg N/ha/yr")
+	})
 	
 }
 )
