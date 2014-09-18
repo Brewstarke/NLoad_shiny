@@ -7,6 +7,7 @@
 
 library(shiny)
 library(leaflet)
+library(rCharts)
 
 shinyUI(navbarPage("N-Load",
 		   
@@ -198,12 +199,18 @@ tabPanel("Geographic Parameters - Results",
   			     value = NA, min = 0.0, max = NA)
   		),
 	 	column(6, 
-	 	       h4(textOutput("TotalLoadAtmosphericOut")),
-	 	       h4(textOutput("TotalFertLoadOut")),
-	 	       h4(textOutput("TotalWasteWaterLoad")),
-	 	       h4(textOutput("NLoadTotalOut"))
+	 	       h4(textOutput("TotalLoadAtmosphericOut"))
+# 	 	       h4(textOutput("TotalFertLoadOut")),
+# 	 	       h4(textOutput("TotalWasteWaterLoad")),
+# 	 	       h4(textOutput("NLoadTotalOut"))
 	 	)
 	 )
+),
+tabPanel("Output Summary",
+	 fluidRow(
+	 	column(3,
+	 	       h6("Distribution of N loading by sub-watershed"),
+	 	       showOutput("SummaryStackBar", "dimple")))
 )
 ))
 	 

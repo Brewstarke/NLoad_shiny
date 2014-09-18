@@ -1,6 +1,10 @@
 
 library(shiny)
-
+library(reshape2)
+library(dplyr)
+library(rCharts)
+library(ggplot2)
+library(RColorBrewer)
 
 # Run any data manpluations or function creations here
 # N-load backbone formula
@@ -81,19 +85,44 @@ shinyServer( # this will be run each time a user changes something.
 			return(SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1)
 		}
 
-	output$TotalLoadAtmosphericOut <- renderText({
-		paste("Your total atmospheric load is ", as.character(TotalLoadAtmospheric()) ,"KG N/ha/year")
-	})
-	output$TotalFertLoadOut <- renderText({
-		paste("The total load from fertilizer under this scenario is ", as.character(TotalFertLoad()), "KG N/ha/year")
-	})
-	output$TotalWasteWaterLoad <- renderText({
-		paste("The total Nitrogen load from wastewater is", as.character(WasteWaterLoad()), "KG N/ha/year")
-	})
-	ouput$NLoadTotalOut <- renderText({
-		paste("Nitrogen load to the estuary ", as.character(NLoadTotal()), "kg N/ha/yr")
-	})
+# 	output$TotalLoadAtmosphericOut <- renderText({
+# 		paste("Your total atmospheric load is ", as.character(TotalLoadAtmospheric()) ,"KG N/ha/year")
+# 	})
+# 	output$TotalFertLoadOut <- renderText({
+# 		paste("The total load from fertilizer under this scenario is ", as.character(TotalFertLoad()), "KG N/ha/year")
+# 	})
+# 	output$TotalWasteWaterLoad <- renderText({
+# 		paste("The total Nitrogen load from wastewater is", as.character(WasteWaterLoad()), "KG N/ha/year")
+# 	})
+# 	ouput$NLoadTotalOut <- renderText({
+# 		paste("Nitrogen load to the estuary ", as.character(NLoadTotal()), "kg N/ha/yr")
+# 	})
+	## Summary plot-
 	
+	
+	output$SummaryStackBar <- renderChart({
+
+		NLoad_names <- names(NLoad_outs) # create vectoir list of names for melt/cast
+		
+		NLoads.Melt <- NLoad_outs %>%
+			select(1:8) %>%	
+			arrange(septic_NLoad) %>%
+			melt(id.vars = NLoad_names[1:2])
+		
+		
+		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
+		HSbar$xAxis(type= "addMeasureAxis")
+		HSbar$legend(
+			x = 0, 
+			y = 0, 
+			width = 500, 
+			height = 1500,
+			horizontalAlign = "center")
+		HSbar$defaultColors(brewer.pal(6, "Set2"))
+		return(HSbar)
+		
+	})
 }
 )
 
