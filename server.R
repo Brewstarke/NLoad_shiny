@@ -100,16 +100,17 @@ shinyServer( # this will be run each time a user changes something.
 	## Summary plot-
 	
 	
-	output$SummaryStackBar <- renderChart({
+	output$HStackBar <- renderChart2({
 
 		NLoad_names <- names(NLoad_outs) # create vectoir list of names for melt/cast
 		
 		NLoads.Melt <- NLoad_outs %>%
 			select(1:8) %>%	
 			arrange(septic_NLoad) %>%
-			melt(id.vars = NLoad_names[1:2])
+			melt(id.vars = NLoad_names[1:2])# %>%
+			#filter(variable == as.vector(input$SourcesN, mode = "any"))
 		
-		
+		# Stacked horizontal plot Total loads descending
 		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
 		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
 		HSbar$xAxis(type= "addMeasureAxis")
@@ -119,10 +120,38 @@ shinyServer( # this will be run each time a user changes something.
 			width = 500, 
 			height = 1500,
 			horizontalAlign = "center")
-		HSbar$defaultColors(brewer.pal(6, "Set2"))
+		HSbar$defaultColors(brewer.pal(6, "Set1"))
 		return(HSbar)
 		
+		
 	})
-}
-)
+
+	output$value <- renderPrint({ input$checkGroup })
+
+	ouput$HStackPct <- renderChart2({
+		
+		NLoad_names <- names(NLoad_outs) # create vectoir list of names for melt/cast
+		
+		NLoads.Melt <- NLoad_outs %>%
+			select(1:8) %>%	
+			arrange(septic_NLoad) %>%
+			melt(id.vars = NLoad_names[1:2]) %>%
+			filter(variable == input$SourcesN)
+				
+		# Stacked horizontal percentage Total plot sorted by total load ascending
+		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+		HSbarPct$yAxis(type= "addCategoryAxis")
+		HSbarPct$xAxis(type= "addPctAxis")
+		HSbarPct$legend(
+			x = 0, 
+			y = 0, 
+			width = 700, 
+			height = 700,
+			horizontalAlign = "right")
+		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
+		return(HSbarPct)
+		
+	})
+
+})
 
