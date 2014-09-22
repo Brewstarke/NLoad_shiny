@@ -105,7 +105,7 @@ shinyServer( # this will be run each time a user changes something.
 		NLoad_names <- names(NLoad_outs) # create vectoir list of names for melt/cast
 		
 		NLoads.Melt <- NLoad_outs %>%
-			select(1:8) %>%	
+			select(input$SourcesN) %>%	# added input selection here instead of filtering later
 			arrange(septic_NLoad) %>%
 			melt(id.vars = NLoad_names[1:2])# %>%
 			#filter(variable == as.vector(input$SourcesN, mode = "any"))
