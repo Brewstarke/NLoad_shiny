@@ -19,7 +19,7 @@ shinyUI(navbarPage("N-Load",
 
   # Sidebar with a slider input for number of bins
   tabPanel("Physical Loading Parameters",
-#----
+#Physical Loading----
   	fluidRow(
   	column(3, 
   		h3("Physical Loading Parameters"),
@@ -45,6 +45,7 @@ shinyUI(navbarPage("N-Load",
   		)
   	)
 ),
+# Retention Parameters ----
 tabPanel("Retention Parameters",
 	 fluidRow(
 	 	column(3,
@@ -74,7 +75,7 @@ tabPanel("Retention Parameters",
   		)
 	 )
 ),
-# ----
+# Transport Parameters----
 tabPanel("Transport Parameters",
 	 fluidRow(
 	 	column(3, 
@@ -116,6 +117,7 @@ tabPanel("Transport Parameters",
   		)
 	 )
 ),
+# Wastewater Parameters ----
 tabPanel("Wastewater Parameters",
 	 fluidRow(
 	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
@@ -160,7 +162,7 @@ tabPanel("Wastewater Parameters",
 	 	)
 	 
 	 ),
-#----
+# Geographic Parameters ----
 tabPanel("Geographic Parameters - Results", 
 	 fluidRow(
 	 	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
@@ -206,6 +208,7 @@ tabPanel("Geographic Parameters - Results",
 	 	)
 	 )
 ),
+# Output Summary Tab ----
 tabPanel("Output Summary",
 	 fluidRow(
 	 	column(2, 
