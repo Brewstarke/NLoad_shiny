@@ -220,7 +220,14 @@ tabPanel("Summary of Loads- Peconics",
 	 	       showOutput("HStackPct", "dimple"))
 	 	)
 ),
-tabPanel("Summary of Loads- Peconics- NVD3 plot")
+# Output Summary Tab #2 ----
+tabPanel("Summary of Loads- Peconics- NVD3 plot",
+	fluidRow(
+		column(12,
+		       h6("Distribution of N loads to Peconics- Interactive...."),
+		       showOutput("plot", "nvd3"))
+		)
 ))
+)
 
 	 
