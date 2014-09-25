@@ -8,6 +8,10 @@ library(RColorBrewer)
 
 # Run any data manpluations or function creations here
 # N-load backbone formula
+NLoads.Melt <- NLoad_outs %>%
+	#	# added input selection here instead of filtering later
+	arrange(septic_NLoad) %>%
+	melt(id.vars = NLoad_names[1:2])
 
 
 shinyServer( # this will be run each time a user changes something.
@@ -129,6 +133,16 @@ shinyServer( # this will be run each time a user changes something.
 		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
 		return(HSbarPct)
 		
+	})
+	output$plot  <- renderChart2({
+	
+		plot1 <- nPlot(value ~ subwatershed_code,
+			       group = "variable",
+			       data = NLoads.Melt,
+			       type = "multiBarHorizontalChart")
+		plot1$params$height = 600
+		plot1$params$dom  <-  "plot"
+		return(plot1)
 	})
 
 })
