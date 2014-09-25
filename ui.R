@@ -8,6 +8,7 @@
 library(shiny)
 library(leaflet)
 library(rCharts)
+library(rjson)
 
 shinyUI(navbarPage("N-Load",
 		   
@@ -209,26 +210,17 @@ tabPanel("Geographic Parameters - Results",
 	 )
 ),
 # Output Summary Tab ----
-tabPanel("Output Summary",
+tabPanel("Summary of Loads- Peconics",
 	 fluidRow(
-	 	column(2, 
-	 	       checkboxGroupInput("SourcesN", label = h5("Sources--This control will select the Ninputs that feed into the filter for the data source to control plots"), 
-	 	       		   choices = c("atmospheric N Load" = 'atmospheric_NLoad', 
-	 	       		   	    "wwtf N Load" = 'wwtf_NLoad', 
-	 	       		   	    "septic N Load" = 'septic_NLoad', 
-	 	       		   	    "agriculture N Load" = 'agriculture_NLoad', 
-	 	       		   	    "lawns N Load" = 'lawns_NLoad', 
-	 	       		   	    "parks & golf N Load" = 'parks_golf_NLoad')
-	 	       		   )
-	 	       ),
-	 	column(5,
+	 	column(6,
 	 	       h6("Distribution of N loading by sub-watershed"),
 	 	       showOutput("HStackBar", "dimple")),
-	 	column(1,
+	 	column(6,
 	 	       h6("Proportions by source"),
 	 	       showOutput("HStackPct", "dimple"))
 	 	)
-)
+),
+tabPanel("Summary of Loads- Peconics- NVD3 plot")
 ))
 
 	 
