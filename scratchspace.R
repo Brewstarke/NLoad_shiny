@@ -3,6 +3,33 @@
 
 
 # Replaced 'input$' with 'input_'
+
+input_AtmDepRate <- .38
+input_NatVegArea
+input_NtransNatVeg
+input_TurfArea
+input_TransTurf
+input_AgArea
+input_NtransAg
+input_RoofArea
+input_DrivewayArea
+input_NtransTurf
+input_ImpervArea
+input_WetlandsArea
+input_PondsArea
+input_ThroughAquiferPonds
+input_FertLawns
+input_LawnArea
+input_PercentHomes
+input_DeNit
+input_FertAg
+input_AgArea
+input_Fert
+input_GolfArea
+input_Denit
+
+
+	
 #
 # Atmospheric Loads =============================================================
 #a
