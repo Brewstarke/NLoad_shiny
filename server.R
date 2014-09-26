@@ -9,13 +9,14 @@ library(RColorBrewer)
 # Run any data manpluations or function creations here
 # N-load backbone formula
 NLoads.Melt <- NLoad_outs %>%
-	#	# added input selection here instead of filtering later
+	select(1:8) %>%	
 	arrange(septic_NLoad) %>%
 	melt(id.vars = NLoad_names[1:2])
 
-
+# Shiny Server ------------------------------------------------------------------
 shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
+# Atmospheric Loads =============================================================
 		#a
 		AtmNatVeg <- function(){
 			return(input$AtmDepRate * input$NatVegArea * input$NtransNatVeg) %>% round(1)
@@ -41,14 +42,11 @@ shinyServer( # this will be run each time a user changes something.
 			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds) %>% round(1)
 		}
 	
-		## Total N load to estuary sourced from Atmospheric Deposition
+	## Total N load to estuary sourced from Atmospheric Deposition
 		TotalLoadAtmospheric <- function(){
 			return(AtmNatVeg() + AtmTurf() + AtmAg() + AtmImperv() + AtmWetlands() + AtmPonds()) %>% round(1)
 		}
-		
-		
-		
-		##Via fertilizer application
+# Fertilizer Application Loads ===================================================		
 		
 		#g
 		FertTurf <- function(){
@@ -62,11 +60,12 @@ shinyServer( # this will be run each time a user changes something.
 		FertGolf <- function(){
 			return(input$Fert * input$GolfArea * input$Denit) %>% round(1)
 		}
-		
+
+	## Total Fertilixation Load
 		TotalFertLoad <- function(){
 			return(FertTurf() + FertAg() + FertGolf()) %>% round(1)
 		}
-		
+# Surface Loads- Fertilizer and Deposition ======================================
 		#j
 		SurfaceLoad <- function(){
 			return((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
@@ -84,25 +83,15 @@ shinyServer( # this will be run each time a user changes something.
 			return(input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
 		}
 		
-		#Nitrogen Loading to Estuary
+# Total Nitrogen Loading to Estuary =============================================
 		NLoadTotal <- function(){
 			return(SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1)
 		}
 
-# 	output$TotalLoadAtmosphericOut <- renderText({
-# 		paste("Your total atmospheric load is ", as.character(TotalLoadAtmospheric()) ,"KG N/ha/year")
-# 	})
-# 	output$TotalFertLoadOut <- renderText({
-# 		paste("The total load from fertilizer under this scenario is ", as.character(TotalFertLoad()), "KG N/ha/year")
-# 	})
-# 	output$TotalWasteWaterLoad <- renderText({
-# 		paste("The total Nitrogen load from wastewater is", as.character(WasteWaterLoad()), "KG N/ha/year")
-# 	})
-# 	ouput$NLoadTotalOut <- renderText({
-# 		paste("Nitrogen load to the estuary ", as.character(NLoadTotal()), "kg N/ha/yr")
-# 	})
-	## Summary plot-
+
+# Shiny Plots -------------------------------------------------------------------
 	
+	# Stacked bar plot- absolute values- dimple plots =====
 	output$HStackBar <- renderChart2({
 		# Stacked horizontal plot Total loads descending
 		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
@@ -118,9 +107,8 @@ shinyServer( # this will be run each time a user changes something.
 		return(HSbar)
 	})
 
+	# Stacked horizontal percentage =========================================
 	output$HStackPct <- renderChart2({
-	
-		# Stacked horizontal percentage Total plot sorted by total load ascending
 		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
 		HSbarPct$yAxis(type= "addCategoryAxis")
 		HSbarPct$xAxis(type= "addPctAxis")
@@ -134,6 +122,7 @@ shinyServer( # this will be run each time a user changes something.
 		return(HSbarPct)
 		
 	})
+	
 	output$plot  <- renderChart2({
 	
 		plot1 <- nPlot(value ~ subwatershed_code,
