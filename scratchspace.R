@@ -7,36 +7,35 @@ library(dplyr)
 
 
 # Areas in ha inputs
-input_WetlandsArea  <- 346
-input_PondsArea  <- 169
-input_NatVegArea  <- 3261
-input_TurfArea <- 735
-input_AgArea  <- 131
+input_WetlandsArea  <- NloadIn1$wetlands
+input_PondsArea  <- NloadIn1$ponds
+input_NatVegArea  <- NloadIn1$NatVeg
+input_TurfArea <- NloadIn1$Turf
+input_AgArea  <- NloadIn1$Ag + NloadIn1$ActAg
 input_RoofArea  <- 80
 input_DrivewayArea <- 80
-input_ImpervArea  <- 486
-input_LawnArea  <- 212
-input_GolfArea <- 133
+input_ImpervArea  <- NloadIn1$Imperv
+input_LawnArea  <- NloadIn1$Lawns
+input_GolfArea <- NloadIn1$Golf
 
 input_AtmDepRate <- 15.1
 input_NtransNatVeg <- .35
 input_NtransTurf <- .38
 input_NtransAg <- .38
 	
-input_FertLawns
+input_FertLawns <- 122
 
-input_PercentHomes
-input_DeNit
-input_FertAg
+input_PercentHomes <- 
+input_DeNit <- 
+input_FertAg <- 136
 
-input_Fert
+input_Fert <- 
 
 input_TransTurf <- .61
 input_NtransWetlands <- .22
 input_NtransPonds <- .44
 
-input_Denit
-input_HumanLoad
+input_HumanLoad <- 
 input_HouseSize
 input_NumbHomesSeptic
 input_NotLostSpetic
