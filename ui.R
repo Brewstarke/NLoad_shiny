@@ -6,7 +6,7 @@
 #
 
 library(shiny)
-library(leaflet)
+# library(leaflet)
 library(rCharts)
 library(rjson)
 
