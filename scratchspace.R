@@ -1,33 +1,51 @@
 
-
+library(dplyr)
 
 
 # Replaced 'input$' with 'input_'
+# Note that 'input' does NOT refer to system inputs but UI inputs
 
-input_AtmDepRate <- .38
-input_NatVegArea
-input_NtransNatVeg
-input_TurfArea
-input_TransTurf
-input_AgArea
-input_NtransAg
-input_RoofArea
-input_DrivewayArea
-input_NtransTurf
-input_ImpervArea
-input_WetlandsArea
-input_PondsArea
-input_ThroughAquiferPonds
+
+# Areas in ha inputs
+input_WetlandsArea  <- 346
+input_PondsArea  <- 169
+input_NatVegArea  <- 3261
+input_TurfArea <- 735
+input_AgArea  <- 131
+input_RoofArea  <- 80
+input_DrivewayArea <- 80
+input_ImpervArea  <- 486
+input_LawnArea  <- 212
+input_GolfArea <- 133
+
+input_AtmDepRate <- 15.1
+input_NtransNatVeg <- .35
+input_NtransTurf <- .38
+input_NtransAg <- .38
+	
 input_FertLawns
-input_LawnArea
+
 input_PercentHomes
 input_DeNit
 input_FertAg
-input_AgArea
-input_Fert
-input_GolfArea
-input_Denit
 
+input_Fert
+
+input_TransTurf <- .61
+input_NtransWetlands <- .22
+input_NtransPonds <- .44
+
+input_Denit
+input_HumanLoad
+input_HouseSize
+input_NumbHomesSeptic
+input_NotLostSpetic
+input_NotLostLeach
+input_NotLostPlume
+input_NotLostAquifer
+input_NumbHomesCess
+input_AvgAnSTPLoad
+input_TotAnFlow
 
 	
 #
@@ -50,11 +68,11 @@ AtmImperv <- function(){
 }
 #e
 AtmWetlands <- function(){
-	return(input_AtmDepRate * input_WetlandsArea) %>% round(1)
+	return(input_AtmDepRate * input_WetlandsArea * input_NtransWetlands) %>% round(1)
 }
 #f
 AtmPonds <- function(){
-	return(input_AtmDepRate * input_PondsArea * input_ThroughAquiferPonds) %>% round(1)
+	return(input_AtmDepRate * input_PondsArea * input_NtransPonds) %>% round(1)
 }
 
 ## Total N load to estuary sourced from Atmospheric Deposition
