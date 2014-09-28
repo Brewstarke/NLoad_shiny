@@ -7,16 +7,19 @@ library(dplyr)
 
 
 # Areas in ha inputs
-input_WetlandsArea  <- NloadIn1$wetlands
+input_WetlandsArea  <- NloadIn1$WetLands
 input_PondsArea  <- NloadIn1$ponds
 input_NatVegArea  <- NloadIn1$NatVeg
 input_TurfArea <- NloadIn1$Turf
 input_AgArea  <- NloadIn1$Ag + NloadIn1$ActAg
-input_RoofArea  <- 80
-input_DrivewayArea <- 80
+
 input_ImpervArea  <- NloadIn1$Imperv
 input_LawnArea  <- NloadIn1$Lawns
 input_GolfArea <- NloadIn1$Golf
+
+# Roof and driveways add up to contribute to impervious surfaces
+input_RoofArea  <- 80
+input_DrivewayArea <- 80
 
 input_AtmDepRate <- 15.1
 input_NtransNatVeg <- .35
@@ -35,14 +38,14 @@ input_TransTurf <- .61
 input_NtransWetlands <- .22
 input_NtransPonds <- .44
 
-input_HumanLoad <- 
-input_HouseSize
-input_NumbHomesSeptic
+input_HumanLoad  <- 4.8
+input_HouseSize  <- 
+input_NumbHomesSeptic  <- 
 input_NotLostSpetic
 input_NotLostLeach
 input_NotLostPlume
 input_NotLostAquifer
-input_NumbHomesCess
+input_PropHomesCess <- .53
 input_AvgAnSTPLoad
 input_TotAnFlow
 
@@ -81,36 +84,44 @@ TotalLoadAtmospheric <- function(){
 # Fertilizer Application Loads ===================================================		
 
 #g
+# REWORK
 FertTurf <- function(){
 	return(input_FertLawns * input_LawnArea * input_PercentHomes * input_DeNit) %>% round(1)
 }
-#h 	
+#h 
+# REWORK
 FertAg <- function(){
 	return(input_FertAg * input_AgArea * input_DeNit) %>% round(1)
 }
 #i
+# REWORK
 FertGolf <- function(){
 	return(input_Fert * input_GolfArea * input_Denit) %>% round(1)
 }
 
 ## Total Fertilixation Load
+# REWORK
 TotalFertLoad <- function(){
 	return(FertTurf() + FertAg() + FertGolf()) %>% round(1)
 }
 # Surface Loads- Fertilizer and Deposition ======================================
 #j
+# REWORK
 SurfaceLoad <- function(){
 	return((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
 }
 #k
+# REWORK
 SepticLoad <- function(){
 	return(input_HumanLoad * input_HouseSize * input_NumbHomesSeptic * input_NotLostSpetic * input_NotLostLeach * input_NotLostPlume * input_NotLostAquifer) %>% round(1)
 }
 #l
+# REWORK
 CesspoolLoad <- function(){
-	return(input_HumanLoad * input_HouseSize * input_NumbHomesCess * input_NotLostSpetic * input_NotLostPlume * input_NotLostAquifer) %>% round(1)
+	return(input_HumanLoad * input_HouseSize * input_PropHomesCess * input_NotLostSpetic * input_NotLostPlume * input_NotLostAquifer) %>% round(1)
 }
 #m
+# REWORK
 WasteWaterLoad <- function(){
 	return(input_AvgAnSTPLoad * input_TotAnFlow) %>% round(1)
 }
