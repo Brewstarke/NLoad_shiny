@@ -8,7 +8,7 @@ library(RColorBrewer)
 
 # Run any data manpluations or function creations here
 # N-load backbone formula
-NLoads.Melt <- NLoad_outs %>%
+NLoads.Melt <- NLoad_outs %>%   # Change to the dataframe output.
 	select(1:8) %>%	
 	arrange(septic_NLoad) %>%
 	melt(id.vars = NLoad_names[1:2])
