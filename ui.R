@@ -31,7 +31,6 @@ tabPanel("Data Loading",
     	       uiOutput("RecArea"),
     	       uiOutput("LawnArea"),
     	       uiOutput("ParkArea")
-    	       
     	),
     	column(9,
     	       h4("Geographic Paramters read in by user"),
@@ -43,11 +42,14 @@ tabPanel("Trial Runs",
 	 	tags$h4("This is a test of the emergency broadcast system..."),
 	 	column(4,
 	 	       h4("another line of text to test."),
-	 	       renderText("AtmNatVegPrint")
- 	       )
+	 	       textOutput("AtmNatVegPrint")
+ 	      	       ),
+	 	column(4,
+	 	       h5("Put out puts here in text form..."),
+	 	       textOutput("NLoadTotalPrint"))
  	)
 ),
-		   # Wastewater Parameters ----
+# Wastewater Parameters ----
 tabPanel("Wastewater Parameters",
 	 fluidRow(
 	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
@@ -120,12 +122,12 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("DeNit",
 	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
 	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
-	   	 	),
+	   	 		),
 	   	 	column(5,
-	   	 	       h3(textOutput("totalNLoadtext")
-	   	 	          ),
-	   	 	)
-	   	 ),
+	   	 	       h3("holy smokes")
+	   	 		)
+	   		 )
+	   	),
 # - Transport Parameters ----
 	   tabPanel("Transport Parameters",
 	   	 fluidRow(
@@ -166,9 +168,9 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("ThroughAquiferWetlands",
 	   	 	       	    "Throughput to the aquifer from wetlands",
 	   	 	       	    min = 0.00, max = 1.00, value= 0.22)
+	   	 		)
 	   	 	)
-	   	 )
-	   ),
+	   	),
 # - Physical loading parameters ----
 	   tabPanel("Physical Loading Parameters", 
 		   fluidRow(
@@ -192,33 +194,34 @@ navbarMenu("Additional Model Parameters",
 		   	       sliderInput("HumanExcretion",
 		   	       	    "Per capita human N excretion rate (kg N/pp/yr):",
 		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1)
-	   	)
-	   )
-	)
-),
-	   
-
-# Output Summary Tab ----
-tabPanel("Loading Sources",
-	 fluidRow(
-	 	column(6,
-	 	       h6("Distribution of N loading by sub-watershed"),
-	 	       showOutput("HStackBar", "dimple")),
-	 	column(6,
-	 	       h6("Proportions by source"),
-	 	       showOutput("HStackPct", "dimple"))
-	 	)
-),
-# Output Summary Tab #2 ----
-tabPanel("Distribution of Loads",
-	fluidRow(
-		column(12,
-		       h6("Distribution of N loads to Peconics- Interactive...."),
-		       showOutput("plot", "nvd3"))
+	   			)
+	   		)
 		)
-))
+	
+	)# ,
+	   
+# Output Summary Tab ----
+# tabPanel("Loading Sources",
+# 	 fluidRow(
+# 	 	column(6,
+# 	 	       h6("Distribution of N loading by sub-watershed"),
+# 	 	       showOutput("HStackBar", "dimple")),
+# 	 	column(6,
+# 	 	       h6("Proportions by source"),
+# 	 	       showOutput("HStackPct", "dimple"))
+# 	 	)
+# 	),
+# # Output Summary Tab #2 ----
+# tabPanel("Distribution of Loads",
+# 	fluidRow(
+# 		column(12,
+# 		       h6("Distribution of N loads to Peconics- Interactive...."),
+# 		       showOutput("plot", "nvd3"))
+# 		)
+# 	)
 )
 )
+
 
 
 
