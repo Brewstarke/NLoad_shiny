@@ -7,7 +7,7 @@ library(dplyr)
 
 
 # Areas in ha inputs
-input_WetlandsArea  <- input$wetlandsArea
+input$wetlandsArea  <- input$wetlandsArea
 input_PondsArea  <- NloadIn1$ponds
 input_NatVegArea  <- NloadIn1$NatVeg
 input_TurfArea <- NloadIn1$Turf
@@ -70,7 +70,7 @@ AtmImperv <- function(){
 }
 #e
 AtmWetlands <- function(){
-	return(input_AtmDepRate * input_WetlandsArea * input_NtransWetlands) %>% round(1)
+	return(input_AtmDepRate * input$wetlandsArea * input_NtransWetlands) %>% round(1)
 }
 #f
 AtmPonds <- function(){
