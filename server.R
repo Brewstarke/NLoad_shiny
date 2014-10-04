@@ -89,6 +89,16 @@ shinyServer( # this will be run each time a user changes something.
 		}
 
 
+# Render Text Outputs ----
+AtmNatVegPrint <- renderPrint({ 
+	AtmNatVeg()
+})
+
+NLoadTotalPrint <- renderPrint({
+	NLoadTotal()
+})
+
+
 # Shiny Plots ----
 	# Stacked bar plot- absolute values- dimple plots 
 	output$HStackBar <- renderChart2({
@@ -146,6 +156,7 @@ filedata <- reactive({
 # output$____ identifies the uiOutput created in server.R and laid out in ui.R
 # these uioutputs create the list of the
 
+# sites
 output$Site <- renderUI({  # need to create a site input for plots and other analysis.
 	df <-filedata()
 	if (is.null(df)) return(NULL)
@@ -155,15 +166,18 @@ output$Site <- renderUI({  # need to create a site input for plots and other ana
 	selectInput("Site", "Site:" ,items, selected = NULL)
 	
 })
+# wetlands
 output$WetlandsArea <- renderUI({
 	df <-filedata()
 	if (is.null(df)) return(NULL)
 	
 	items=names(df)
 	names(items)=items
-	selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+	selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = NULL) 
+	# inputID links to the /scratchspace.R input list at top.
 	
 })
+# ponds
 output$PondsArea <- renderUI({
 	df <-filedata()
 	if (is.null(df)) return(NULL)
@@ -172,6 +186,7 @@ output$PondsArea <- renderUI({
 	selectInput("PondsArea", "Ponds Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
 	
 })
+# natural vegetation
 output$NatVegArea <- renderUI({
 	df <-filedata()
 	if (is.null(df)) return(NULL)
@@ -254,11 +269,6 @@ output$ParkArea <- renderUI({
 output$filetable <- renderTable({
 	filedata()
 })
-
-# Render Text
-AtmNatVegPrint <- renderPrint({ 
-	AtmNatVeg()
-	    })
 
 })
 
