@@ -1,23 +1,30 @@
 # global.R
 
 
+# TO DO:
+# 
+# modify formulas for ag and active ag
+# add in seperation of 200m cesspool
+# as per Stephen's response- add funciton running cesspool- cesspool <200m- septic - septic <200m
+#
 
-Atmospheric Loads =============================================================
+
+# Atmospheric Loads =============================================================
 #a
 AtmNatVeg <- function(){
-	return(input_AtmDepRate * input_NatVegArea * input_NtransNatVeg) %>% round(1)
+	return(input_AtmDepRate * input$NatVegArea * input_NtransNatVeg) %>% round(1)
 }
 #b
 AtmTurf <- function(){
-	return(input_AtmDepRate * input_TurfArea * input_TransTurf) %>% round(1)
+	return(input_AtmDepRate * input$TurfArea * input_TransTurf) %>% round(1)
 }
 #c
 AtmAg <- function(){  ## Not working!
-	return(input_AtmDepRate * input_AgArea * input_NtransAg) %>% round(1)
+	return(input_AtmDepRate * input$AgArea * input_NtransAg) %>% round(1)
 }
 #d
 AtmImperv <- function(){
-	return((input_AtmDepRate * (input_RoofArea + input_DrivewayArea) * input_NtransTurf) * (input_AtmDepRate * input_ImpervArea)) %>% round(1) #Need help with this formula
+	return((input_AtmDepRate * (input_RoofArea + input_DrivewayArea) * input_NtransTurf) * (input_AtmDepRate * input$ImpervArea)) %>% round(1) #Need help with this formula
 }
 #e
 AtmWetlands <- function(){
@@ -25,7 +32,7 @@ AtmWetlands <- function(){
 }
 #f
 AtmPonds <- function(){
-	return(input_AtmDepRate * input_PondsArea * input_NtransPonds) %>% round(1)
+	return(input_AtmDepRate * input$PondsArea * input_NtransPonds) %>% round(1)
 }
 
 ## Total N load to estuary sourced from Atmospheric Deposition
@@ -37,17 +44,17 @@ TotalLoadAtmospheric <- function(){
 #g
 # REWORK
 FertTurf <- function(){
-	return(input_FertLawns * input_LawnArea * input_PercentHomes * input_DeNit) %>% round(1)
+	return(input_FertLawns * input$LawnArea * input_PercentHomes * input_DeNit) %>% round(1)
 }
 #h 
 # REWORK
 FertAg <- function(){
-	return(input_FertAg * input_AgArea * input_DeNit) %>% round(1)
+	return(input_FertAg * input$AgArea * input_DeNit) %>% round(1)
 }
 #i
 # REWORK
 FertGolf <- function(){
-	return(input_Fert * input_GolfArea * input_Denit) %>% round(1)
+	return(input_Fert * input$RecArea * input_Denit) %>% round(1)
 }
 
 ## Total Fertilixation Load
