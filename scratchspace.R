@@ -7,7 +7,7 @@ library(dplyr)
 
 
 # Areas in ha inputs
-input_WetlandsArea  <- NloadIn1$WetLands
+input_WetlandsArea  <- input$wetlandsArea
 input_PondsArea  <- NloadIn1$ponds
 input_NatVegArea  <- NloadIn1$NatVeg
 input_TurfArea <- NloadIn1$Turf
@@ -18,36 +18,36 @@ input_LawnArea  <- NloadIn1$Lawns
 input_GolfArea <- NloadIn1$Golf
 
 # Roof and driveways add up to contribute to impervious surfaces
-input_RoofArea  <- 80
-input_DrivewayArea <- 80
+# input_RoofArea  <- 80
+# input_DrivewayArea <- 80
+# 
+# input_AtmDepRate <- 15.1
+# input_NtransNatVeg <- .35
+# input_NtransTurf <- .38
+# input_NtransAg <- .38
+# 	
+# input_FertLawns <- 122
+# 
+# input_PercentHomes <- 
+# input_DeNit <- 
+# input_FertAg <- 136
 
-input_AtmDepRate <- 15.1
-input_NtransNatVeg <- .35
-input_NtransTurf <- .38
-input_NtransAg <- .38
-	
-input_FertLawns <- 122
-
-input_PercentHomes <- 
-input_DeNit <- 
-input_FertAg <- 136
-
-input_Fert <- 
-
-input_TransTurf <- .61
-input_NtransWetlands <- .22
-input_NtransPonds <- .44
-
-input_HumanLoad  <- 4.8
-input_HouseSize  <- 
-input_NumbHomesSeptic  <- 
-input_NotLostSpetic
-input_NotLostLeach
-input_NotLostPlume
-input_NotLostAquifer
-input_PropHomesCess <- .53
-input_AvgAnSTPLoad
-input_TotAnFlow
+# input_Fert <- 
+# 
+# input_TransTurf <- .61
+# input_NtransWetlands <- .22
+# input_NtransPonds <- .44
+# 
+# input_HumanLoad  <- 4.8
+# input_HouseSize  <- 
+# input_NumbHomesSeptic  <- 
+# input_NotLostSpetic
+# input_NotLostLeach
+# input_NotLostPlume
+# input_NotLostAquifer
+# input_PropHomesCess <- .53
+# input_AvgAnSTPLoad
+# input_TotAnFlow
 
 	
 #

@@ -12,8 +12,42 @@ library(rjson)
 
 shinyUI(navbarPage("N-Load",
 		   #theme("bootstrap.css",
-		   
-# Wastewater Parameters ----
+# Data Loading Tab ---- 
+tabPanel("Data Loading", 
+    fluidRow(
+    	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
+    	column(2,
+    	       h3("Load in data file here:"),
+    	       fileInput('datafile', 'Choose CSV file containing land use data measured in hectares',
+    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
+    	       uiOutput("Site"),
+    	       uiOutput("WetlandsArea"),
+    	       uiOutput("PondsArea"),
+    	       uiOutput("NatVegArea"),
+    	       uiOutput("TurfArea"),
+    	       uiOutput("AgArea"),
+    	       uiOutput("ImpervArea"),
+    	       uiOutput("ActiveagArea"),
+    	       uiOutput("RecArea"),
+    	       uiOutput("LawnArea"),
+    	       uiOutput("ParkArea")
+    	       
+    	),
+    	column(9,
+    	       h4("Geographic Paramters read in by user"),
+    	       tableOutput("filetable"))
+    )
+),
+tabPanel("Trial Runs",
+	 fluidRow(
+	 	tags$h4("This is a test of the emergency broadcast system..."),
+	 	column(4,
+	 	       h4("another line of text to test."),
+	 	       renderText("AtmNatVegPrint")
+ 	       )
+ 	)
+),
+		   # Wastewater Parameters ----
 tabPanel("Wastewater Parameters",
 	 fluidRow(
 	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
@@ -58,52 +92,6 @@ tabPanel("Wastewater Parameters",
 	 	)
 	 
 	 ),
-# Geographic Parameters ----
-tabPanel("Geographic Parameters - Results", 
-	 fluidRow(
-	 	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
-	 	column(3,
-	 	       h3("Geographic Parameters"),
-  	       
-  		numericInput("LawnArea",
-  			    "Average lawn size (hectares):",
-  			    min= 0.00, max= 20, value= 0.05),
-  		numericInput("NatVegArea",
-  			    "area of naturally vegetated land",
-  			    value= NA, min = 0.0, max = NA),
-  		numericInput("TurfArea",
-  			     "Turf Area- needs better description",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("AgArea", 
-  			     "Agricultural area- needs better description",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("GolfArea",
-  			     "Golf course area (ha)",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("RoofArea",
-  			     "Total area of roofs",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("DrivewayArea",
-  			     "Total area of driveways",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("ImpervArea",
-  			     "Total area of impervious surfaces such as roads/parking lots/runways (ha)",
-  			     value = NA, min = 0.0, max = NA),
-  		numericInput("PondsArea",
-  			     "Total area of freshwater ponds (ha)",
-  			     value= NA, min = 0.0, max = NA),
-  		numericInput("WetlandsArea",
-  			     "Total area of wetlands",
-  			     value = NA, min = 0.0, max = NA)
-  		),
-	 	column(6, 
-	 	       h4(textOutput("TotalLoadAtmosphericOut"))
-# 	 	       h4(textOutput("TotalFertLoadOut")),
-# 	 	       h4(textOutput("TotalWasteWaterLoad")),
-# 	 	       h4(textOutput("NLoadTotalOut"))
-	 	)
-	 )
-),
 # Less Active Parameters ----
 navbarMenu("Additional Model Parameters", 
 	   tabPanel("Retention Parameters",
@@ -132,13 +120,17 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("DeNit",
 	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
 	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
+	   	 	),
+	   	 	column(5,
+	   	 	       h3(textOutput("totalNLoadtext")
+	   	 	          ),
 	   	 	)
-	   	 )
-	   ),
+	   	 ),
+# - Transport Parameters ----
 	   tabPanel("Transport Parameters",
 	   	 fluidRow(
 	   	 	column(3, 
-	   	 	       # transportation parameter UI inputs ====
+	   	 	       # transportation parameter UI inputs 
 	   	 	       h3("Transportation Parameters"),
 	   	 	       
 	   	 	       sliderInput("PercentHomes",
@@ -177,11 +169,11 @@ navbarMenu("Additional Model Parameters",
 	   	 	)
 	   	 )
 	   ),
-	   tabPanel("Physical Loading Parameters",
+# - Physical loading parameters ----
+	   tabPanel("Physical Loading Parameters", 
 		   fluidRow(
 		   	column(3, 
 		   	       h3("Physical Loading Parameters"),
-		   	       
 		   	       sliderInput("AtmDepRate",
 		   	       	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
 		   	       	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.1), 
@@ -205,9 +197,9 @@ navbarMenu("Additional Model Parameters",
 	)
 ),
 	   
-#
+
 # Output Summary Tab ----
-tabPanel("Summary of Loads- Peconics",
+tabPanel("Loading Sources",
 	 fluidRow(
 	 	column(6,
 	 	       h6("Distribution of N loading by sub-watershed"),
@@ -218,13 +210,14 @@ tabPanel("Summary of Loads- Peconics",
 	 	)
 ),
 # Output Summary Tab #2 ----
-tabPanel("Summary of Loads- Peconics- NVD3 plot",
+tabPanel("Distribution of Loads",
 	fluidRow(
 		column(12,
 		       h6("Distribution of N loads to Peconics- Interactive...."),
 		       showOutput("plot", "nvd3"))
 		)
 ))
+)
 )
 
 
