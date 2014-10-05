@@ -13,6 +13,18 @@ library(RColorBrewer)
 # 	
 # 	melt(id.vars = NLoad_names[1:2])
 
+# ("Site") Not used as an input for N load functions but for plotting and possibly geocoding shapefiles
+# ("WetlandsArea"),
+# ("PondsArea"),
+# ("NatVegArea"),
+# ("TurfArea"),
+# ("AgArea"),
+# ("ImpervArea"),
+# ("ActiveagArea"),
+# ("RecArea"),
+# ("LawnArea"),
+# ("ParkArea")
+
 # Shiny Server ------------------------------------------------------------------
 shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
@@ -65,7 +77,7 @@ shinyServer( # this will be run each time a user changes something.
 		TotalFertLoad <- function(){
 			return(FertTurf() + FertAg() + FertGolf()) %>% round(1)
 		}
-# Surface Loads- Fertilizer and Deposition ======================================
+# Surface Loads- Fertilizer and Deposition ------------------------------------
 		#j
 		SurfaceLoad <- function(){
 			return((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
@@ -83,19 +95,19 @@ shinyServer( # this will be run each time a user changes something.
 			return(input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
 		}
 		
-# Total Nitrogen Loading to Estuary =============================================
+# Total Nitrogen Loading to Estuary --------------------------------------------
 		NLoadTotal <- function(){
 			return(SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1)
 		}
 
 
 # Render Text Outputs ----
-AtmNatVegPrint <- renderPrint({ 
-	AtmNatVeg()
+output$test1 <- renderText({ 
+	input$HumanLoad
 })
 
-NLoadTotalPrint <- renderPrint({
-	NLoadTotal()
+output$test2 <- renderPrint({
+	input$AgArea
 })
 
 

@@ -39,14 +39,14 @@ tabPanel("Data Loading",
 ),
 tabPanel("Trial Runs",
 	 fluidRow(
-	 	tags$h4("This is a test of the emergency broadcast system..."),
+	 	tags$h6("This is a test of the emergency broadcast system..."),
 	 	column(4,
-	 	       h4("another line of text to test."),
-	 	       textOutput("AtmNatVegPrint")
+	 	       h4(textOutput("test2")),
+	 	       h5(textOutput("test1"))
  	      	       ),
 	 	column(4,
 	 	       h5("Put out puts here in text form..."),
-	 	       textOutput("NLoadTotalPrint"))
+	 	       textOutput("test2"))
  	)
 ),
 # Wastewater Parameters ----
