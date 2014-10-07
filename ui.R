@@ -5,10 +5,6 @@
 # http://shiny.rstudio.com
 #
 
-library(shiny)
-# library(leaflet)
-library(rCharts)
-library(rjson)
 
 shinyUI(navbarPage("N-Load",
 		   #theme("bootstrap.css",
@@ -18,12 +14,8 @@ tabPanel("Data Loading",
     	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
     	column(2,
     	       h3("Load in data file here:"),
-    	       fileInput('file1', 'Choose CSV File',
-    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv')),
-    	       tags$hr(),
-#     	       checkboxInput('header', 'Header', TRUE),
-#     	       radioButtons('sep', 'Separator',c(Comma=',',Semicolon=';',Tab='\t'),'Comma'),
-#     	       radioButtons('quote', 'Quote',c(None='','Double Quote'='"','Single Quote'="'"),'Double Quote'),
+    	       fileInput('datafile', 'Choose CSV file',
+    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
     	       uiOutput("Site"),
     	       uiOutput("WetlandsArea"),
     	       uiOutput("PondsArea"),
@@ -41,18 +33,16 @@ tabPanel("Data Loading",
     	       tableOutput("filetable"))
 	    )
 	),
+# # Trial Runs Tab ----
 tabPanel("Trial Runs",
 	 fluidRow(
 	 	tags$h6("This is a test of the emergency broadcast system..."),
-	 	column(4,
-	 	       h4(textOutput("test2")),
-	 	       h5(textOutput("test1"))
- 	      	       ),
-	 	column(4,
-	 	       h5("Put out puts here in text form..."),
-	 	       textOutput("test2"))
- 		)
-	),
+	 	column(6,
+	 	       h5("holy shit if this works...")),
+	 	column(6,
+	 	       h4("Put out puts here in text form..."))
+		)
+	 ),
 # Wastewater Parameters ----
 tabPanel("Wastewater Parameters",
 	 fluidRow(
@@ -127,7 +117,7 @@ navbarMenu("Additional Model Parameters",
 	   	 		)
 	   		 )
 	   	),
-# - Transport Parameters ----
+# ---> Transport Parameters ----
 	   tabPanel("Transport Parameters",
 	   	 fluidRow(
 	   	 	column(3, 
@@ -170,7 +160,7 @@ navbarMenu("Additional Model Parameters",
 	   	 		)
 	   	 	)
 	   	),
-# - Physical loading parameters ----
+# ---> Physical loading parameters ----
 	   tabPanel("Physical Loading Parameters", 
 		   fluidRow(
 		   	column(3, 
@@ -197,28 +187,28 @@ navbarMenu("Additional Model Parameters",
 	   		)
 		)
 	
-	)# ,
+	) ,
 	   
 # Output Summary Tab ----
-# tabPanel("Loading Sources",
-# 	 fluidRow(
-# 	 	column(6,
-# 	 	       h6("Distribution of N loading by sub-watershed"),
-# 	 	       showOutput("HStackBar", "dimple")),
-# 	 	column(6,
-# 	 	       h6("Proportions by source"),
-# 	 	       showOutput("HStackPct", "dimple"))
-# 	 	)
-# 	),
+tabPanel("Loading Sources",
+	 fluidRow(
+	 	column(6,
+	 	       h6("Distribution of N loading by sub-watershed"),
+	 	       showOutput("HStackBar", "dimple")),
+	 	column(6,
+	 	       h6("Proportions by source"),
+	 	       showOutput("HStackPct", "dimple"))
+	 	)
+	),
 # # Output Summary Tab #2 ----
-# tabPanel("Distribution of Loads",
-# 	fluidRow(
-# 		column(12,
-# 		       h6("Distribution of N loads to Peconics- Interactive...."),
-# 		       showOutput("plot", "nvd3"))
-# 		)
-# 	)
-# ----
+tabPanel("Distribution of Loads",
+	fluidRow(
+		column(12,
+		       h6("Distribution of N loads to Peconics- Interactive...."),
+		       showOutput("plot", "nvd3"))
+		)
+	)
+#----
 )
 )
 

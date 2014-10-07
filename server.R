@@ -30,19 +30,13 @@ shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
 		
 		# Datafile input: ----
-		output$contents <- renderTable({
-			
-			# input$file1 will be NULL initially. After the user selects and uploads a 
-			# file, it will be a data frame with 'name', 'size', 'type', and 'datapath' 
-			# columns. The 'datapath' column will contain the local filenames where the 
-			# data can be found.
-			
-			inFile <- input$file1
-			
-			if (is.null(inFile))
-				return(NULL)
-			
-			read.csv(inFile$datapath, header=input$header, sep=input$sep, quote=input$quote)
+		filedata <- reactive({
+			infile <- input$datafile
+			if (is.null(infile)) {
+				# User has not uploaded a file yet - from http://bl.ocks.org/psychemedia/9690079
+				return(NULL)# Output message in html....to ui.R
+			}
+			read.csv(infile$datapath)
 		})
 		# Data mapping -------------------------------------------------
 		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
@@ -158,6 +152,7 @@ shinyServer( # this will be run each time a user changes something.
 			selectInput("ParkArea", "Park Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
 			
 		})
+		# Output data table
 		output$filetable <- renderTable({
 			filedata()
 		})
@@ -244,49 +239,49 @@ output$test2 <- renderPrint({
 })
 
 
-# # Shiny Plots ----
-# 	# Stacked bar plot- absolute values- dimple plots 
-# 	output$HStackBar <- renderChart2({
-# 		# Stacked horizontal plot Total loads descending
-# 		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
-# 		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
-# 		HSbar$xAxis(type= "addMeasureAxis")
-# 		HSbar$legend(
-# 			x = 0, 
-# 			y = 0, 
-# 			width = 500, 
-# 			height = 1500,
-# 			horizontalAlign = "center")
-# 		HSbar$defaultColors(brewer.pal(6, "Set1"))
-# 		return(HSbar)
-# 	})
-# 
-# 	# Stacked horizontal percentage 
-# 	output$HStackPct <- renderChart2({
-# 		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
-# 		HSbarPct$yAxis(type= "addCategoryAxis")
-# 		HSbarPct$xAxis(type= "addPctAxis")
-# 		HSbarPct$legend(
-# 			x = 0, 
-# 			y = 0, 
-# 			width = 700, 
-# 			height = 700,
-# 			horizontalAlign = "right")
-# 		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
-# 		return(HSbarPct)
-# 		
-# 	})
-# 	
-# 	output$plot  <- renderChart2({
-# 	
-# 		plot1 <- nPlot(value ~ subwatershed_code,
-# 			       group = "variable",
-# 			       data = NLoads.Melt,
-# 			       type = "multiBarHorizontalChart")
-# 		plot1$params$height = 600
-# 		plot1$params$dom  <-  "plot"
-# 		return(plot1)
-# 	})
+# Shiny Plots ----
+	# Stacked bar plot- absolute values- dimple plots 
+	output$HStackBar <- renderChart2({
+		# Stacked horizontal plot Total loads descending
+		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
+		HSbar$xAxis(type= "addMeasureAxis")
+		HSbar$legend(
+			x = 0, 
+			y = 0, 
+			width = 500, 
+			height = 1500,
+			horizontalAlign = "center")
+		HSbar$defaultColors(brewer.pal(6, "Set1"))
+		return(HSbar)
+	})
+
+	# Stacked horizontal percentage 
+	output$HStackPct <- renderChart2({
+		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+		HSbarPct$yAxis(type= "addCategoryAxis")
+		HSbarPct$xAxis(type= "addPctAxis")
+		HSbarPct$legend(
+			x = 0, 
+			y = 0, 
+			width = 700, 
+			height = 700,
+			horizontalAlign = "right")
+		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
+		return(HSbarPct)
+		
+	})
+	
+	output$plot  <- renderChart2({
+	
+		plot1 <- nPlot(value ~ subwatershed_code,
+			       group = "variable",
+			       data = NLoads.Melt,
+			       type = "multiBarHorizontalChart")
+		plot1$params$height = 600
+		plot1$params$dom  <-  "plot"
+		return(plot1)
+	})
 
 
 
