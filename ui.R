@@ -18,8 +18,12 @@ tabPanel("Data Loading",
     	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
     	column(2,
     	       h3("Load in data file here:"),
-    	       fileInput('datafile', 'Choose CSV file containing land use data measured in hectares',
-    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
+    	       fileInput('file1', 'Choose CSV File',
+    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv')),
+    	       tags$hr(),
+#     	       checkboxInput('header', 'Header', TRUE),
+#     	       radioButtons('sep', 'Separator',c(Comma=',',Semicolon=';',Tab='\t'),'Comma'),
+#     	       radioButtons('quote', 'Quote',c(None='','Double Quote'='"','Single Quote'="'"),'Double Quote'),
     	       uiOutput("Site"),
     	       uiOutput("WetlandsArea"),
     	       uiOutput("PondsArea"),
@@ -31,12 +35,12 @@ tabPanel("Data Loading",
     	       uiOutput("RecArea"),
     	       uiOutput("LawnArea"),
     	       uiOutput("ParkArea")
-    	),
-    	column(9,
+    	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
+    	column(8,
     	       h4("Geographic Paramters read in by user"),
     	       tableOutput("filetable"))
-    )
-),
+	    )
+	),
 tabPanel("Trial Runs",
 	 fluidRow(
 	 	tags$h6("This is a test of the emergency broadcast system..."),
@@ -47,15 +51,14 @@ tabPanel("Trial Runs",
 	 	column(4,
 	 	       h5("Put out puts here in text form..."),
 	 	       textOutput("test2"))
- 	)
-),
+ 		)
+	),
 # Wastewater Parameters ----
 tabPanel("Wastewater Parameters",
 	 fluidRow(
 	 	tags$h5("Wastewater Parameters- From septic, cesspool, STP's"),
 	 	column(4,
 	 	       h6("Human Factors"),
-	 	       
 	 	       numericInput("HumanLoad",
 	 	       	     "Human N released per year (kg??)", #Need to confirm units
 	 	       	     min = 0.00, max = 10.00, value = 4.80),
@@ -68,10 +71,8 @@ tabPanel("Wastewater Parameters",
 	 	       numericInput("NumbHomesCess",
 	 	       	     "Number of homes with Cesspool",
 	 	       	     min= 0, max = NA, value = NA),
-	 	       
-	 	       #k l and m
+	 	   #k l and m
 	 	       h6("Septic System & Cesspool Efficiencies"),
-	 	       
 	 	       sliderInput("NotLostSpetic",
 	 	       	    "% NOT lost in septic tank",
 	 	       	    min= 0.00, max = 1.00, value = 0.94),
@@ -92,15 +93,13 @@ tabPanel("Wastewater Parameters",
 	 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
 	 	       )
 	 	)
-	 
-	 ),
+	  ),
 # Less Active Parameters ----
 navbarMenu("Additional Model Parameters", 
 	   tabPanel("Retention Parameters",
 	   	 fluidRow(
 	   	 	column(3,
 	   	 	       h3("Retention Parameters"),
-	   	 	       
 	   	 	       sliderInput("NtransNatVeg",
 	   	 	       	    "% Atmospheric Deposition NOT retained in natural vegetation",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.35),
@@ -219,6 +218,7 @@ navbarMenu("Additional Model Parameters",
 # 		       showOutput("plot", "nvd3"))
 # 		)
 # 	)
+# ----
 )
 )
 
