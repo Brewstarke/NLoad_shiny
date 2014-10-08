@@ -36,9 +36,9 @@ shinyServer( # this will be run each time a user changes something.
 				# User has not uploaded a file yet - from http://bl.ocks.org/psychemedia/9690079
 				return(NULL)# Output message in html....to ui.R
 			}
-			read.csv(infile$datapath)
+			read.csv(infile$datapath, header = TRUE)
 		})
-		# Data mapping -------------------------------------------------
+# Data mapping -------------------------------------------------
 		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
 		# these uioutputs create the list of the
 		
@@ -167,6 +167,20 @@ shinyServer( # this will be run each time a user changes something.
 		output$filetable <- renderTable({
 			filedata()
 		})
+		
+		# Output data summaries- mainly used for diagnostics for model building.
+		output$filesummary <- renderText({
+				df <- filedata()
+				if(is.null(df)){
+					return("Load data to see summary")
+				}
+				#colMeans(df[2:length(df)])
+				return(input$AgArea)
+				
+
+		})
+		
+		
 # Atmospheric Loads =============================================================
 		#a
 		AtmNatVeg <- function(){
@@ -240,14 +254,11 @@ shinyServer( # this will be run each time a user changes something.
 		}
 
 
-# Render Text Outputs ----
-output$test1 <- renderText({ 
-	input$HumanLoad
-})
-
-output$test2 <- renderPrint({
-	input$AgArea
-})
+# Start of NLoad outputs----
+		output$NloadDF <- renderTable({
+			# FertGolf and # FertAg
+			return(data.frame(FertGolf(), FertAg()))
+		})
 
 
 # Shiny Plots ----

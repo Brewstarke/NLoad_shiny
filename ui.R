@@ -30,7 +30,10 @@ tabPanel("Data Loading",
     	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
     	column(8,
     	       h4("Geographic Paramters read in by user"),
-    	       tableOutput("filetable"))
+    	       tableOutput("filetable"),
+    	       verbatimTextOutput("filesummary"),
+    	       tableOutput("NloadDF")
+    	       )
 	    )
 	),
 # # Trial Runs Tab ----
