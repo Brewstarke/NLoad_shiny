@@ -42,114 +42,125 @@ shinyServer( # this will be run each time a user changes something.
 		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
 		# these uioutputs create the list of the
 		
-		# sites
+		# Site
+		# input$Site
 		output$Site <- renderUI({  # need to create a site input for plots and other analysis.
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items <- names(df) 
 			names(items) <- items
-			selectInput("Site", "Site:" ,items, selected = NULL)
+			selectInput("Site", "Site:" ,items, selected = items[1])
 			
 		})
 		# wetlands
+		# input$WetlandsArea
 		output$WetlandsArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = NULL) 
+			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = items[2]) 
 			# inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# ponds
+		# input$PondsArea
 		output$PondsArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			items=names(df)
 			names(items)=items
-			selectInput("PondsArea", "Ponds Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("PondsArea", "Ponds Area (ha):", items, selected = items[3]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# natural vegetation
+		# input$NatVegArea
 		output$NatVegArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# turfArea
+		# input$TurfArea
 		output$TurfArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("TurfArea", "Turf Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("TurfArea", "Turf Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# agArea
+		# input$AgArea
 		output$AgArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("AgArea", "Agricultural Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("AgArea", "Agricultural Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# impervArea
+		# input$ImpervArea
 		output$ImpervArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# activeagArea
+		# input$ActiveagArea
 		output$ActiveagArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ActiveagArea", "Active Agricultral Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ActiveagArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# recArea
+		# input$RecArea
 		output$RecArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("RecArea", "Recreational Areas (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("RecArea", "Recreational Areas (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# lawnArea
+		# input$LawnArea
 		output$LawnArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("LawnArea", "Lawn Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# parkArea
+		# input$ParkArea
 		output$ParkArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ParkArea", "Park Area (ha):", items, selected = NULL) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ParkArea", "Park Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# Output data table
