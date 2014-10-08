@@ -6,6 +6,9 @@ library(rCharts)
 library(ggplot2)
 library(RColorBrewer)
 
+#---- scratch space ----
+
+
 # Run any data manpluations or function creations here
 # N-load backbone formula
 # NLoads.Melt <- NLoad_outs %>%   # Change to the dataframe output.
