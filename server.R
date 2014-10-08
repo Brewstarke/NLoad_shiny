@@ -38,10 +38,23 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			read.csv(infile$datapath, header = TRUE)
 		})
+		
 # Data mapping -------------------------------------------------
+# Map renderUI inputs to variable names in df
+# 		isolate({
+# 			df=filedata()
+# 			site= input$Site
+# 			wetlands= df[[input$WetlandsArea]]
+# 			
+# 			#create the dataframe of outputs using the mapped variable names.
+# 			NLoad_outs= data.frame(place=unique(c(as.vector(dummy[[fr]]),
+# 							     as.vector(dummy[[to]]))),stringsAsFactors=F)      
+# 			cbind(locs, t(sapply(locs$place,geocode, USE.NAMES=F))) 
+# 		})
 		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
 		# these uioutputs create the list of the
-		
+
+# uiRender commands ----		
 		# Site
 		# input$Site
 		output$Site <- renderUI({  # need to create a site input for plots and other analysis.
@@ -167,19 +180,23 @@ shinyServer( # this will be run each time a user changes something.
 		output$filetable <- renderTable({
 			filedata()
 		})
-		
+# ----		
 		# Output data summaries- mainly used for diagnostics for model building.
-		output$filesummary <- renderText({
+		output$filesummary <- renderPrint({
 				df <- filedata()
 				if(is.null(df)){
 					return("Load data to see summary")
 				}
 				#colMeans(df[2:length(df)])
-				return(input$AgArea)
+				inPondsArea <- df[[input$PondsArea]]
+				return(str(df[[input$PondsArea]]))
 				
 
 		})
-		
+reactive({
+	df <- filedata()
+	inPondsArea <- df[input$PondsArea]
+})
 		
 # Atmospheric Loads =============================================================
 		#a
@@ -204,7 +221,7 @@ shinyServer( # this will be run each time a user changes something.
 		}
 		#f
 		AtmPonds <- function(){
-			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds) %>% round(1)
+			return(input$AtmDepRate * inPondsArea * input$ThroughAquiferPonds) %>% round(1)
 		}
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
@@ -257,7 +274,7 @@ shinyServer( # this will be run each time a user changes something.
 # Start of NLoad outputs----
 		output$NloadDF <- renderTable({
 			# FertGolf and # FertAg
-			return(data.frame(FertGolf(), FertAg()))
+			return(AtmPonds())
 		})
 
 
