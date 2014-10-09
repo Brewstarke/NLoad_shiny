@@ -77,7 +77,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = items[2]) 
+			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = items[3]) 
 			# inputID links to the /scratchspace.R input list at top.
 			
 		})
@@ -179,32 +179,37 @@ shinyServer( # this will be run each time a user changes something.
 			selectInput("ParkArea", "Park Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
+	
+
 		# Output data table
 		output$filetable <- renderTable({
-			filedata()
+			df <- filedata()
+			if(is.null(df)){
+				return("Load data to see summary")
+			}
+			df
 		})
 # ----		
 		# Output data summaries- mainly used for diagnostics for model building.
 		output$filesummary <- renderPrint({
-				df <- filedata()
-				if(is.null(df)){
+				df2 <- filedata()
+				if(is.null(df2)){
 					return("Load data to see summary")
 				}
 				#colMeans(df[2:length(df)])
-				inPondsArea <- df[[input$PondsArea]]
-				return(str(df[[input$PondsArea]]))
-				
+				inAtmNatVeg <- df2[input$NatVegArea]
+				inAtmNatVeg
+		 	})
 
-		})
-reactive({
-	df <- filedata()
-	inPondsArea <- df[input$PondsArea]
-})
+	
+
+
 		
+	reactive({}	
 # Atmospheric Loads =============================================================
 		#a -good-
 		AtmNatVeg <- function(){
-			return(input$AtmDepRate * input$NatVegArea * input$AtmNtransNatVeg) %>% round(1)
+			return(input$AtmDepRate * inAtmNatVeg * input$AtmNtransNatVeg) %>% round(1)
 		}
 		#b -good-
 		AtmTurfRec <- function(){
@@ -272,7 +277,7 @@ reactive({
 		NLoadTotal <- function(){
 			return((SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1))
 		}
-
+})
 
 # Start of NLoad outputs----
 		output$NloadDF <- renderTable({

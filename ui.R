@@ -32,8 +32,7 @@ tabPanel("Data Loading",
     	column(8,
     	       h4("Geographic Paramters read in by user"),
     	       tableOutput("filetable"),
-    	       verbatimTextOutput("filesummary"),
-    	       tableOutput("NloadDF")
+    	       verbatimTextOutput("filesummary")
     	       )
 	    )
 	),
