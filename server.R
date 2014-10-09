@@ -23,7 +23,7 @@ library(RColorBrewer)
 # ("TurfArea"),
 # ("AgArea"),
 # ("ImpervArea"),
-# ("ActiveagArea"),
+# ("ActiveAgArea"),
 # ("RecArea"),
 # ("LawnArea"),
 # ("ParkArea")
@@ -135,15 +135,15 @@ shinyServer( # this will be run each time a user changes something.
 			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
-		# activeagArea
-		# input$ActiveagArea
-		output$ActiveagArea <- renderUI({
+		# activeAgArea
+		# input$ActiveAgArea
+		output$ActiveAgArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ActiveagArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# recArea
@@ -202,34 +202,34 @@ reactive({
 })
 		
 # Atmospheric Loads =============================================================
-		#a
+		#a -good-
 		AtmNatVeg <- function(){
-			return(input$AtmDepRate * input$NatVegArea * input$NtransNatVeg) %>% round(1)
+			return(input$AtmDepRate * input$NatVegArea * input$AtmNtransNatVeg) %>% round(1)
 		}
-		#b
-		AtmTurf <- function(){
-			return(input$AtmDepRate * input$TurfArea * input$TransTurf) %>% round(1)
+		#b -good-
+		AtmTurfRec <- function(){
+			return(input$AtmDepRate * (input$TurfArea + input$RecArea + input$LawnArea + input$ParkArea) * input$TransTurf) %>% round(1)
 		}
-		#c
-		AtmAg <- function(){  ## Not working!
-			return(input$AtmDepRate * input$AgArea * input$NtransAg) %>% round(1)
+		#c -good- 
+		AtmAg <- function(){  
+			return(input$AtmDepRate * (input$AgArea + input$ActiveAgArea) * input$AtmNtransAg) %>% round(1)
 		}
-		#d - CHECK FORMALA
-		AtmImperv <- function(){
-			return((input$AtmDepRate * (input$ImpervArea) * input$NtransTurf) * (input$AtmDepRate * input$ImpervArea)) %>% round(1) #Need help with this formula
+		#d -good- FOR NOW...
+		AtmImperv <- function(){ # NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+			return((input$AtmDepRate * input$ImpervArea * input$AtmNtransImperv) ) %>% round(1) #Need help with this formula....
 		}
-		#e
+		#e -good-
 		AtmWetlands <- function(){
-			return(input$AtmDepRate * input$WetlandsArea) %>% round(1)
+			return(input$AtmDepRate * input$WetlandsArea * input$NtransWetlands) %>% round(1)
 		}
-		#f
-		AtmPonds <- function(){
-			return(input$AtmDepRate * inPondsArea * input$ThroughAquiferPonds) %>% round(1)
+		#f -good-
+		AtmFreshWater <- function(){
+			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds) %>% round(1)
 		}
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
 		TotalLoadAtmospheric <- function(){
-			return(AtmNatVeg() + AtmTurf() + AtmAg() + AtmImperv() + AtmWetlands() + AtmPonds()) %>% round(1)
+			return((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())  ) %>% round(1)
 		}
 # Fertilizer Application Loads ===================================================		
 		
@@ -277,7 +277,7 @@ reactive({
 # Start of NLoad outputs----
 		output$NloadDF <- renderTable({
 			# FertGolf and # FertAg
-			return(AtmPonds())
+			return(AtmFreshWater())
 		})
 
 
