@@ -57,7 +57,8 @@ shinyServer( # this will be run each time a user changes something.
 		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
 		# these uioutputs create the list of the
 
-# uiRender commands ----		
+# uiRender commands ----	
+#  These functions generate a user input (a select input) 
 		# Site
 		# input$Site
 		output$Site <- renderUI({  # need to create a site input for plots and other analysis.
@@ -125,7 +126,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 		})
 		# impervArea
-		# input$ImpervArea
+		# IArea
 		output$ImpervArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
@@ -205,31 +206,57 @@ shinyServer( # this will be run each time a user changes something.
 
 
 		
-	reactive({}	
+	NLoad <- reactive({	
+			  # Parameter mapping...
+			  TDN <- input$AtmDepRate
+			  ANTNV <- input$AtmNtransNatVeg
+			  TranT <- input$TransTurf
+			  ATAg <- input$AtmNtransAg
+			  ATImp <- input$AtmNtransImperv
+			  TAP <- input$ThroughAquiferPonds
+			  
+			  # User loaded areas 
+			  TArea <- input$TurfArea
+			  RArea <- input$RecArea
+			  LArea <- input$LawnArea
+			  PArea <- input$ParkArea
+			  AArea <- input$AgArea
+			  AAArea <- input$ActiveAgArea
+			  IArea <- input$ImpervArea
+			  WArea <- input$WetlandsArea
+			  WTWet <- input$NtransWetlands
+			  PArea <- input$PondsArea
+			 
+			  # Fertilizer Loads
+			  FertL <- input$FertLawns
+			  FertPerc <- input$PercentHomes
+			  DNit <- input$DeNit
+			  
+			  
 # Atmospheric Loads =============================================================
 		#a -good-
 		AtmNatVeg <- function(){
-			return(input$AtmDepRate * inAtmNatVeg * input$AtmNtransNatVeg) %>% round(1)
+			return(TDN * inAtmNatVeg * ANTNV) %>% round(1)
 		}
 		#b -good-
 		AtmTurfRec <- function(){
-			return(input$AtmDepRate * (input$TurfArea + input$RecArea + input$LawnArea + input$ParkArea) * input$TransTurf) %>% round(1)
+			return(TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
 		}
 		#c -good- 
 		AtmAg <- function(){  
-			return(input$AtmDepRate * (input$AgArea + input$ActiveAgArea) * input$AtmNtransAg) %>% round(1)
+			return(TDN * (AArea + AAArea) * ATAg) %>% round(1)
 		}
 		#d -good- FOR NOW...
 		AtmImperv <- function(){ # NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
-			return((input$AtmDepRate * input$ImpervArea * input$AtmNtransImperv) ) %>% round(1) #Need help with this formula....
+			return((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....
 		}
 		#e -good-
 		AtmWetlands <- function(){
-			return(input$AtmDepRate * input$WetlandsArea * input$NtransWetlands) %>% round(1)
+			return(TDN * WArea * WTWet) %>% round(1)
 		}
 		#f -good-
 		AtmFreshWater <- function(){
-			return(input$AtmDepRate * input$PondsArea * input$ThroughAquiferPonds) %>% round(1)
+			return(TDN * PArea * TAP) %>% round(1)
 		}
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
@@ -240,15 +267,15 @@ shinyServer( # this will be run each time a user changes something.
 		
 		#g
 		FertTurf <- function(){
-			return(input$FertLawns * input$LawnArea * input$PercentHomes * input$DeNit) %>% round(1)
+			return(FertL * LArea * FertPerc  * DNit) %>% round(1)
 		}
 		#h 	
 		FertAg <- function(){
-			return(input$FertAg * input$AgArea * input$DeNit) %>% round(1)
+			return(input$FertAg * AArea * DNit) %>% round(1)
 		}
 		#i
 		FertGolf <- function(){
-			return(input$Fert * input$GolfArea * input$Denit) %>% round(1)
+			return(input$FertGolf * input$GolfArea * DNit) %>% round(1)
 		}
 
 	## Total Fertilixation Load
