@@ -178,21 +178,7 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			df
 		})
-# Data output summaries ----		
-		# Output data summaries- mainly used for diagnostics for model building.
-		output$filesummary <- renderPrint({
-# 				df2 <- filedata()
-# 				if(is.null(df2)){
-# 					return("Load data to see summary")
-# 				}
-# 				#colMeans(df[2:length(df)])
-# 				NVArea <- df2[input$NatVegArea]
-# 				NVArea
-			NLoad()
-			Load
-		 	})
 
-	
 
 
 # Function definitions for NLM 	-----	
@@ -306,6 +292,22 @@ shinyServer( # this will be run each time a user changes something.
 })
 
 # Start of NLoad outputs----
+
+# Data output summaries ----		
+# Output data summaries- mainly used for diagnostics for model building.
+output$filesummary <- renderPrint({
+	# 				df2 <- filedata()
+	# 				if(is.null(df2)){
+	# 					return("Load data to see summary")
+	# 				}
+	# 				#colMeans(df[2:length(df)])
+	# 				NVArea <- df2[input$NatVegArea]
+	# 				NVArea
+	NLoad()
+	Load
+})
+
+
 		output$NloadDF <- renderTable({
 			# FertGolf and # FertAg
 			return(AtmFreshWater(), AtmWetlands())
