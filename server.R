@@ -43,19 +43,7 @@ shinyServer( # this will be run each time a user changes something.
 		})
 		
 # Data mapping -------------------------------------------------
-# Map renderUI inputs to variable names in df
-# 		isolate({
-# 			df=filedata()
-# 			site= input$Site
-# 			wetlands= df[[input$WetlandsArea]]
-# 			
-# 			#create the dataframe of outputs using the mapped variable names.
-# 			NLoad_outs= data.frame(place=unique(c(as.vector(dummy[[fr]]),
-# 							     as.vector(dummy[[to]]))),stringsAsFactors=F)      
-# 			cbind(locs, t(sapply(locs$place,geocode, USE.NAMES=F))) 
-# 		})
-		# output$____ identifies the uiOutput created in server.R and laid out in ui.R
-		# these uioutputs create the list of the
+
 
 # uiRender commands ----	
 #  These functions generate a user input (a select input) 
@@ -181,7 +169,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 		})
 	
-
+# Data Table Output ------------------------------
 		# Output data table
 		output$filetable <- renderTable({
 			df <- filedata()
@@ -190,23 +178,28 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			df
 		})
-# ----		
+# Data output summaries ----		
 		# Output data summaries- mainly used for diagnostics for model building.
 		output$filesummary <- renderPrint({
-				df2 <- filedata()
-				if(is.null(df2)){
-					return("Load data to see summary")
-				}
-				#colMeans(df[2:length(df)])
-				inAtmNatVeg <- df2[input$NatVegArea]
-				inAtmNatVeg
+# 				df2 <- filedata()
+# 				if(is.null(df2)){
+# 					return("Load data to see summary")
+# 				}
+# 				#colMeans(df[2:length(df)])
+# 				NVArea <- df2[input$NatVegArea]
+# 				NVArea
+			NLoad()
+			Load
 		 	})
 
 	
 
 
-		
+# Function definitions for NLM 	-----	
 	NLoad <- reactive({	
+		
+			fd <- filedata()
+			
 			  # Parameter mapping...
 			  TDN <- input$AtmDepRate
 			  ANTNV <- input$AtmNtransNatVeg
@@ -215,28 +208,32 @@ shinyServer( # this will be run each time a user changes something.
 			  ATImp <- input$AtmNtransImperv
 			  TAP <- input$ThroughAquiferPonds
 			  
-			  # User loaded areas 
-			  TArea <- input$TurfArea
-			  RArea <- input$RecArea
-			  LArea <- input$LawnArea
-			  PArea <- input$ParkArea
-			  AArea <- input$AgArea
-			  AAArea <- input$ActiveAgArea
-			  IArea <- input$ImpervArea
-			  WArea <- input$WetlandsArea
-			  WTWet <- input$NtransWetlands
-			  PArea <- input$PondsArea
-			 
+			  # User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
+			  TArea <- fd[[input$TurfArea]]
+			  NVArea <- fd[[input$NatVegArea]]
+			  RArea <- fd[[input$RecArea]]
+			  LArea <- fd[[input$LawnArea]]
+			  PArea <- fd[[input$ParkArea]]
+			  AArea <- fd[[input$AgArea]]
+			  AAArea <- fd[[input$ActiveAgArea]]
+			  IArea <- fd[[input$ImpervArea]]
+			  WArea <- fd[[input$WetlandsArea]]
+			  WTWet <- fd[[input$NtransWetlands]]
+			  PArea <- fd[[input$PondsArea]]
+			  GArea <- fd[[input$GolfArea]]
 			  # Fertilizer Loads
 			  FertL <- input$FertLawns
 			  FertPerc <- input$PercentHomes
 			  DNit <- input$DeNit
+			  FertG <- input$FertGolf
+			  FertAg <- input$FertAg
+			  
 			  
 			  
 # Atmospheric Loads =============================================================
 		#a -good-
 		AtmNatVeg <- function(){
-			return(TDN * inAtmNatVeg * ANTNV) %>% round(1)
+			return(TDN * NVArea * ANTNV) %>% round(1)
 		}
 		#b -good-
 		AtmTurfRec <- function(){
@@ -261,7 +258,7 @@ shinyServer( # this will be run each time a user changes something.
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
 		TotalLoadAtmospheric <- function(){
-			return((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())  ) %>% round(1)
+			return((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())) %>% round(1)
 		}
 # Fertilizer Application Loads ===================================================		
 		
@@ -269,13 +266,13 @@ shinyServer( # this will be run each time a user changes something.
 		FertTurf <- function(){
 			return(FertL * LArea * FertPerc  * DNit) %>% round(1)
 		}
-		#h 	
-		FertAg <- function(){
-			return(input$FertAg * AArea * DNit) %>% round(1)
+		#h 	Is this Active Ag only? Need to find out and/or add actvie ag.
+		FertAg <- function(){ 
+			return(FertAg * AArea * DNit) %>% round(1)
 		}
 		#i
 		FertGolf <- function(){
-			return(input$FertGolf * input$GolfArea * DNit) %>% round(1)
+			return(FertG * GArea * DNit) %>% round(1)
 		}
 
 	## Total Fertilixation Load
@@ -304,12 +301,14 @@ shinyServer( # this will be run each time a user changes something.
 		NLoadTotal <- function(){
 			return((SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1))
 		}
+
+	Load <- data.frame(TotalLoadAtmospheric(), TotalFertLoad())
 })
 
 # Start of NLoad outputs----
 		output$NloadDF <- renderTable({
 			# FertGolf and # FertAg
-			return(AtmFreshWater())
+			return(AtmFreshWater(), AtmWetlands())
 		})
 
 
