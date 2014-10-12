@@ -114,7 +114,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 		})
 		# impervArea
-		# IArea
+		# input$ImpervArea
 		output$ImpervArea <- renderUI({
 			df <-filedata()
 			if (is.null(df)) return(NULL)
@@ -179,139 +179,181 @@ shinyServer( # this will be run each time a user changes something.
 			df
 		})
 
-
-
-# Function definitions for NLM 	-----	
-	NLoad <- reactive({	
-		
+		output$filetable2 <- renderTable({
+				
 			fd <- filedata()
+			if(is.null(fd)){
+				return("Load data to see summary")
+			}
 			
-			  # Parameter mapping...
-			  TDN <- input$AtmDepRate
-			  ANTNV <- input$AtmNtransNatVeg
-			  TranT <- input$TransTurf
-			  ATAg <- input$AtmNtransAg
-			  ATImp <- input$AtmNtransImperv
-			  TAP <- input$ThroughAquiferPonds
+			# Function definitions for NLM 	-----	
+			# 	NLoad <- reactive({	
+			
+			
+			# From NLM_OysterBay Spreadsheet\
+			#
+			# 	[Rainfall nitrate]:
+			# 		[Rainfall ammonia]:
+			# 		[Rainfall dissolved organic N]:
+			# 	[TDN]:
+			# 		Ave Annual Rainfall:
+			# 		Wet to Total Deposition Factor:
+			# 	% atmos N transported from wetlands
+			# 	% atmos N transported from freshwater ponds
+			# 	% atmos N transported from Nat'l Veg Soils:
+			# 	% atmos N transported from Turf Soils:
+			# 	% atmos N transported from Agr. Soils:
+			# 	Median Home Size:
+			# 	No of stories/home:
+			# 	House footprint area:
+			# 	Average area of roof:
+			# 	Average area of driveway:
+			# 	% atmos N transported from Impervious Soils (roof/driveway):
+			# 	Fertilizer N applied to lawns:
+			# 	Fertilizer N applied to agriculture:
+			# 	Fertilizer N applied to rec/golf courses:
+			# 	Average lawn area:
+			# 	% of homes that use fertilizer:
+			# 	% of fertilizer N transported from Turf Soils:
+			# 	% of fertilizer N transported from Agri Soils:
+			# 	% of fertilizer N transported from Rec. Soils:
+			# 	Per capita human N excretion rate:
+			# 	People per house:
+			# 	% N transported from septic tank
+			# 	%N transported through leaching field
+			# 	% waste transported from septic plumes:
+			# 	% watershed N transported from vadose zone:
+			# 	% N transported from aquifer:
+			# 	# of houses in high density residential areas:
+			# 	# of houses in medium-high density residential areas:
+			# 	# of houses in medium density residential areas:
+			# 	# of houses in medium-low density residential areas:
+			# 	# of houses in low density residential areas:
+			# 	percent of onsite wastewater systems that are cesspools *** Make this a user datasheet loading input ***
+			
+			
+			# Parameter mapping...
+			TDN <- input$AtmDepRate
+			ANTNV <- input$AtmNtransNatVeg
+			ATAg <- input$AtmNtransAg
+			ATImp <- input$AtmNtransImperv
+			TAP <- input$ThroughAquiferPonds
+			FAgTran <- input$FertTransAg
+			FRecTran <- input$FertTransRec
+		   	TranT <- input$FertTransTurf
 			  
-			  # User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
-			  TArea <- fd[[input$TurfArea]]
-			  NVArea <- fd[[input$NatVegArea]]
-			  RArea <- fd[[input$RecArea]]
-			  LArea <- fd[[input$LawnArea]]
-			  PArea <- fd[[input$ParkArea]]
-			  AArea <- fd[[input$AgArea]]
-			  AAArea <- fd[[input$ActiveAgArea]]
-			  IArea <- fd[[input$ImpervArea]]
-			  WArea <- fd[[input$WetlandsArea]]
-			  WTWet <- fd[[input$NtransWetlands]]
-			  PArea <- fd[[input$PondsArea]]
-			  GArea <- fd[[input$GolfArea]]
-			  # Fertilizer Loads
-			  FertL <- input$FertLawns
-			  FertPerc <- input$PercentHomes
-			  DNit <- input$DeNit
-			  FertG <- input$FertGolf
-			  FertAg <- input$FertAg
-			  
-			  
+			# User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
+			# fd == dataframe that is loaded in by user
+			# input$xxx == the column name of dataframe that is mapped to parameter XX. The [[ ]] function returns a vector 
+			TArea <- fd[[input$TurfArea]]
+			NVArea <- fd[[input$NatVegArea]]
+			RArea <- fd[[input$RecArea]]
+			LArea <- fd[[input$LawnArea]]
+			PArea <- fd[[input$ParkArea]]
+			AArea <- fd[[input$AgArea]]
+			AAArea <- fd[[input$ActiveAgArea]]
+			IArea <- fd[[input$ImpervArea]]
+			WArea <- fd[[input$WetlandsArea]]
+			WTWet <- fd[[input$NtransWetlands]]
+			PArea <- fd[[input$PondsArea]]
+			GArea <- fd[[input$GolfArea]]
+			# Fertilizer Loads
+			FertL <- input$FertLawns
+			FertPerc <- input$PercentHomes
+			DNit <- input$DeNit
+			FertG <- input$FertRec
+			FertAg <- input$FertAg
+			# Septic and Cesspools  
+			HL <- input$HumanLoad 
+			HSize <- input$HouseSize
+			NHS <- input$NumbHomesSeptic
+# 			input$NotLostSpetic
+# 			input$NotLostLeach
+# 			input$NotLostPlume
+# 			input$NotLostAquifer
+# 			  
 			  
 # Atmospheric Loads =============================================================
 		#a -good-
-		AtmNatVeg <- function(){
-			return(TDN * NVArea * ANTNV) %>% round(1)
-		}
+		fd$AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
+		
 		#b -good-
-		AtmTurfRec <- function(){
-			return(TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
-		}
+		fd$AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
+		
 		#c -good- 
-		AtmAg <- function(){  
-			return(TDN * (AArea + AAArea) * ATAg) %>% round(1)
-		}
+		fd$AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
+		
 		#d -good- FOR NOW...
-		AtmImperv <- function(){ # NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
-			return((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....
-		}
+		fd$AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+		
 		#e -good-
-		AtmWetlands <- function(){
-			return(TDN * WArea * WTWet) %>% round(1)
-		}
+		fd$AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
+		
 		#f -good-
-		AtmFreshWater <- function(){
-			return(TDN * PArea * TAP) %>% round(1)
-		}
+		fd$AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
+		
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
-		TotalLoadAtmospheric <- function(){
-			return((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())) %>% round(1)
-		}
+#		fd$TotalLoadAtmospheric <- ((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())) %>% round(1)
+		
 # Fertilizer Application Loads ===================================================		
 		
 		#g
-		FertTurf <- function(){
-			return(FertL * LArea * FertPerc  * DNit) %>% round(1)
-		}
+		fd$FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
+		
+		#ActiveAg- new to the NLM_Oyster Bay Spreadsheet
 		#h 	Is this Active Ag only? Need to find out and/or add actvie ag.
-		FertAg <- function(){ 
-			return(FertAg * AArea * DNit) %>% round(1)
-		}
+		fd$FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
+		
 		#i
-		FertGolf <- function(){
-			return(FertG * GArea * DNit) %>% round(1)
-		}
+		fd$FertGolf <- (FertG * GArea * FRecTran) %>% round(1)
+		
+		fd$FertParks <- (FertG * FRecTran * PArea) %>% round(1)
+		
 
 	## Total Fertilixation Load
-		TotalFertLoad <- function(){
-			return(FertTurf() + FertAg() + FertGolf()) %>% round(1)
-		}
+#		fd$TotalFertLoad <- (FertTurf() + FertActiveAg() + FertGolf() + FertParks()) %>% round(1)
+		
 # Surface Loads- Fertilizer and Deposition ------------------------------------
 		#j
-		SurfaceLoad <- function(){
-			return((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
-		}
+		fd$SurfaceLoad <- ((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
+		
 		#k
-		SepticLoad <- function(){
-			return(input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
-		}
+		fd$SepticLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		
 		#l
-		CesspoolLoad <- function(){
-			return(input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
-		}
+		fd$CesspoolLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		
 		#m
-		WasteWaterLoad <- function(){
-			return(input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
-		}
+		fd$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
+		
 		
 # Total Nitrogen Loading to Estuary --------------------------------------------
-		NLoadTotal <- function(){
-			return((SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1))
-		}
+#		fd$NLoadTotal <- ((SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1))
+		
 
-	Load <- data.frame(TotalLoadAtmospheric(), TotalFertLoad())
+# 	NLoad.outputs <- data.frame(TotalLoadAtmospheric(), TotalFertLoad())
+# 	NLoad.outputs
+		fd	
 })
 
 # Start of NLoad outputs----
 
+
 # Data output summaries ----		
-# Output data summaries- mainly used for diagnostics for model building.
-output$filesummary <- renderPrint({
-	# 				df2 <- filedata()
-	# 				if(is.null(df2)){
-	# 					return("Load data to see summary")
-	# 				}
-	# 				#colMeans(df[2:length(df)])
-	# 				NVArea <- df2[input$NatVegArea]
-	# 				NVArea
-	NLoad()
-	Load
-})
-
-
-		output$NloadDF <- renderTable({
-			# FertGolf and # FertAg
-			return(AtmFreshWater(), AtmWetlands())
-		})
+# Output data summaries- mainly used for diagnostics for model building at this point.
+# 		output$filesummary <- renderTable({
+# 			# 				df2 <- filedata()
+# 			# 				if(is.null(df2)){
+# 			# 					return("Load data to see summary")
+# 			# 				}
+# 			# 				#colMeans(df[2:length(df)])
+# 			# 				NVArea <- df2[input$NatVegArea]
+# 			# 				NVArea
+# 			NLoad()
+# 			NLoad.outputs
+# 			
+# 		})
 
 
 # Shiny Plots ----

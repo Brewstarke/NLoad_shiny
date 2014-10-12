@@ -7,6 +7,47 @@
 #
 ####
 
+# From NLM_OysterBay Spreadsheet\
+#
+# 	[Rainfall nitrate]:
+# 		[Rainfall ammonia]:
+# 		[Rainfall dissolved organic N]:
+# 	[TDN]:
+# 		Ave Annual Rainfall:
+# 		Wet to Total Deposition Factor:
+# 	% atmos N transported from wetlands
+# 	% atmos N transported from freshwater ponds
+# 	% atmos N transported from Nat'l Veg Soils:
+# 	% atmos N transported from Turf Soils:
+# 	% atmos N transported from Agr. Soils:
+# 	Median Home Size:
+# 	No of stories/home:
+# 	House footprint area:
+# 	Average area of roof:
+# 	Average area of driveway:
+# 	% atmos N transported from Impervious Soils (roof/driveway):
+# 	Fertilizer N applied to lawns:
+# 	Fertilizer N applied to agriculture:
+# 	Fertilizer N applied to rec/golf courses:
+# 	Average lawn area:
+# 	% of homes that use fertilizer:
+# 	% of fertilizer N transported from Turf Soils:
+# 	% of fertilizer N transported from Agri Soils:
+# 	% of fertilizer N transported from Rec. Soils:
+# 	Per capita human N excretion rate:
+# 	People per house:
+# 	% N transported from septic tank
+# 	%N transported through leaching field
+# 	% waste transported from septic plumes:
+# 	% watershed N transported from vadose zone:
+# 	% N transported from aquifer:
+# 	# of houses in high density residential areas:
+# 	# of houses in medium-high density residential areas:
+# 	# of houses in medium density residential areas:
+# 	# of houses in medium-low density residential areas:
+# 	# of houses in low density residential areas:
+# 	percent of onsite wastewater systems that are cesspools
+
 shinyUI(navbarPage("N-Load",
 		   #theme("bootstrap.css",
 # Data Loading Tab ---- 
@@ -32,7 +73,7 @@ tabPanel("Data Loading",
     	column(8,
     	       h4("Geographic Paramters read in by user"),
     	       tableOutput("filetable"),
-    	       verbatimTextOutput("filesummary")
+    	       tableOutput("filetable2")
     	       )
 	    )
 	),
