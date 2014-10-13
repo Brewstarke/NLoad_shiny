@@ -77,7 +77,7 @@ shinyServer( # this will be run each time a user changes something.
 			if (is.null(df)) return(NULL)
 			items=names(df)
 			names(items)=items
-			selectInput("PondsArea", "Ponds Area (ha):", items, selected = items[3]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("PondsArea", "Ponds Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# natural vegetation
@@ -88,7 +88,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# turfArea
@@ -99,7 +99,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("TurfArea", "Turf Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("TurfArea", "Turf Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# agArea
@@ -110,7 +110,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("AgArea", "Agricultural Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("AgArea", "Agricultural Area (ha):", items, selected = items[7]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# impervArea
@@ -121,7 +121,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[8]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# activeAgArea
@@ -132,7 +132,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[9]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# recArea
@@ -143,7 +143,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("RecArea", "Recreational Areas (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("RecArea", "Recreational Areas (ha):", items, selected = items[10]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# lawnArea
@@ -154,7 +154,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[11]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# parkArea
@@ -165,7 +165,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ParkArea", "Park Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ParkArea", "Park Area (ha):", items, selected = items[12]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 	
@@ -178,7 +178,7 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			df
 		})
-
+# Make N Load output dataframe
 		output$filetable2 <- renderTable({
 				
 			fd <- filedata()
@@ -187,36 +187,36 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			
 			# Function definitions for NLM 	-----	
-			# 	NLoad <- reactive({	
 			
-			
+			# Parameter mapping...
 			# From NLM_OysterBay Spreadsheet\
 			#
 			# 	[Rainfall nitrate]:
 			# 		[Rainfall ammonia]:
 			# 		[Rainfall dissolved organic N]:
-			# 	[TDN]:
+			TDN <- input$AtmDepRate		# 	[TDN]:
 			# 		Ave Annual Rainfall:
 			# 		Wet to Total Deposition Factor:
 			# 	% atmos N transported from wetlands
-			# 	% atmos N transported from freshwater ponds
-			# 	% atmos N transported from Nat'l Veg Soils:
+			TAP <- input$ThroughAquiferPonds 	# 	% atmos N transported from freshwater ponds
+			ANTNV <- input$AtmNtransNatVeg  	# 	% atmos N transported from Nat'l Veg Soils:
 			# 	% atmos N transported from Turf Soils:
-			# 	% atmos N transported from Agr. Soils:
+			ATAg <- input$AtmNtransAg 		# 	% atmos N transported from Agr. Soils:
+			ATImp <- input$AtmNtransImperv ### Not used in NLM-OysterBay
 			# 	Median Home Size:
 			# 	No of stories/home:
 			# 	House footprint area:
 			# 	Average area of roof:
 			# 	Average area of driveway:
 			# 	% atmos N transported from Impervious Soils (roof/driveway):
-			# 	Fertilizer N applied to lawns:
-			# 	Fertilizer N applied to agriculture:
-			# 	Fertilizer N applied to rec/golf courses:
-			# 	Average lawn area:
-			# 	% of homes that use fertilizer:
-			# 	% of fertilizer N transported from Turf Soils:
-			# 	% of fertilizer N transported from Agri Soils:
-			# 	% of fertilizer N transported from Rec. Soils:
+			FertL <- input$FertLawns 		# 	Fertilizer N applied to lawns:
+			FertAg <- input$FertAg     	# 	Fertilizer N applied to agriculture:
+			FertG <- input$FertRec  	# 	Fertilizer N applied to rec/golf courses:
+			# NOT USED TOTAL LAWN AREA USED # 	Average lawn area:
+			FertPerc <- input$PercentHomes  # 	% of homes that use fertilizer:
+			TranT <- input$FertTransTurf    # 	% of fertilizer N transported from Turf Soils:
+			FAgTran <- input$FertTransAg    # 	% of fertilizer N transported from Agri Soils:
+			FRecTran <- input$FertTransRec  # 	% of fertilizer N transported from Rec. Soils:
 			# 	Per capita human N excretion rate:
 			# 	People per house:
 			# 	% N transported from septic tank
@@ -231,16 +231,18 @@ shinyServer( # this will be run each time a user changes something.
 			# 	# of houses in low density residential areas:
 			# 	percent of onsite wastewater systems that are cesspools *** Make this a user datasheet loading input ***
 			
+			DNit <- input$DeNit
 			
-			# Parameter mapping...
-			TDN <- input$AtmDepRate
-			ANTNV <- input$AtmNtransNatVeg
-			ATAg <- input$AtmNtransAg
-			ATImp <- input$AtmNtransImperv
-			TAP <- input$ThroughAquiferPonds
-			FAgTran <- input$FertTransAg
-			FRecTran <- input$FertTransRec
-		   	TranT <- input$FertTransTurf
+			
+			# Septic and Cesspools  
+			HL <- input$HumanLoad 
+			HSize <- input$HouseSize
+			NHS <- input$NumbHomesSeptic
+			# 			input$NotLostSpetic
+			# 			input$NotLostLeach
+			# 			input$NotLostPlume
+			# 			input$NotLostAquifer
+			# 			  
 			  
 			# User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
 			# fd == dataframe that is loaded in by user
@@ -257,21 +259,7 @@ shinyServer( # this will be run each time a user changes something.
 			WTWet <- fd[[input$NtransWetlands]]
 			PArea <- fd[[input$PondsArea]]
 			GArea <- fd[[input$GolfArea]]
-			# Fertilizer Loads
-			FertL <- input$FertLawns
-			FertPerc <- input$PercentHomes
-			DNit <- input$DeNit
-			FertG <- input$FertRec
-			FertAg <- input$FertAg
-			# Septic and Cesspools  
-			HL <- input$HumanLoad 
-			HSize <- input$HouseSize
-			NHS <- input$NumbHomesSeptic
-# 			input$NotLostSpetic
-# 			input$NotLostLeach
-# 			input$NotLostPlume
-# 			input$NotLostAquifer
-# 			  
+		
 			  
 # Atmospheric Loads =============================================================
 		#a -good-
