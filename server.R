@@ -178,8 +178,12 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			df
 		})
-# Make N Load output dataframe
 		output$filetable2 <- renderTable({
+			n <- NLOAD()
+			fd
+		})
+# Make N Load output dataframe
+		NLOAD <- reactive({
 				
 			fd <- filedata()
 			if(is.null(fd)){
@@ -191,19 +195,16 @@ shinyServer( # this will be run each time a user changes something.
 			# Parameter mapping...
 			# From NLM_OysterBay Spreadsheet\
 			#
-			# 	[Rainfall nitrate]:
-			# 		[Rainfall ammonia]:
-			# 		[Rainfall dissolved organic N]:
-			TDN <- input$AtmDepRate		# 	[TDN]:
-			# 		Ave Annual Rainfall:
-			# 		Wet to Total Deposition Factor:
-			# 	% atmos N transported from wetlands
+			TDN <- input$AtmDepRate			# 	[TDN]:  Taken from NADP Data
+								# 		Ave Annual Rainfall:
+								# 		Wet to Total Deposition Factor:
+								# 	% atmos N transported from wetlands
 			TAP <- input$ThroughAquiferPonds 	# 	% atmos N transported from freshwater ponds
 			ANTNV <- input$AtmNtransNatVeg  	# 	% atmos N transported from Nat'l Veg Soils:
-			# 	% atmos N transported from Turf Soils:
+			ANTT <- input$					# 	% atmos N transported from Turf Soils:
 			ATAg <- input$AtmNtransAg 		# 	% atmos N transported from Agr. Soils:
 			ATImp <- input$AtmNtransImperv ### Not used in NLM-OysterBay
-			# 	Median Home Size:
+			HSize <- input$HouseSize 	# 	Median Home Size:
 			# 	No of stories/home:
 			# 	House footprint area:
 			# 	Average area of roof:
@@ -217,7 +218,7 @@ shinyServer( # this will be run each time a user changes something.
 			TranT <- input$FertTransTurf    # 	% of fertilizer N transported from Turf Soils:
 			FAgTran <- input$FertTransAg    # 	% of fertilizer N transported from Agri Soils:
 			FRecTran <- input$FertTransRec  # 	% of fertilizer N transported from Rec. Soils:
-			# 	Per capita human N excretion rate:
+			HL <- input$HumanLoad 		# 	Per capita human N excretion rate:
 			# 	People per house:
 			# 	% N transported from septic tank
 			# 	%N transported through leaching field
@@ -230,20 +231,14 @@ shinyServer( # this will be run each time a user changes something.
 			# 	# of houses in medium-low density residential areas:
 			# 	# of houses in low density residential areas:
 			# 	percent of onsite wastewater systems that are cesspools *** Make this a user datasheet loading input ***
-			
-			DNit <- input$DeNit
-			
-			
+								
 			# Septic and Cesspools  
-			HL <- input$HumanLoad 
-			HSize <- input$HouseSize
 			NHS <- input$NumbHomesSeptic
 			# 			input$NotLostSpetic
 			# 			input$NotLostLeach
 			# 			input$NotLostPlume
 			# 			input$NotLostAquifer
-			# 			  
-			  
+		
 			# User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
 			# fd == dataframe that is loaded in by user
 			# input$xxx == the column name of dataframe that is mapped to parameter XX. The [[ ]] function returns a vector 

@@ -30,7 +30,7 @@
 # 	Fertilizer N applied to agriculture:
 # 	Fertilizer N applied to rec/golf courses:
 # 	Average lawn area:
-# 	% of homes that use fertilizer:
+
 # 	% of fertilizer N transported from Turf Soils:
 # 	% of fertilizer N transported from Agri Soils:
 # 	% of fertilizer N transported from Rec. Soils:
@@ -93,42 +93,42 @@ tabPanel("Direct Human Inputs",
 	 	column(3,
 	 	   h4("Direct Application of fertilizers"),
 	 	       sliderInput("PercentHomes",
-	 	       	    "% of homes that use fertilizer",
+	 	       	    "% of homes that use fertilizer",# 	% of homes that use fertilizer:
 	 	       	    min = 0.00, max = 1.00, value = 0.49),
 	 	   sliderInput("FertLawns",
-	 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
+	 	   	    "Fertilizer N applied to lawns: (kg N/ha):", # Fertilizer N applied to lawns:
 	 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
 	 	   sliderInput("FertAg", 
-	 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
+	 	   	    "Fertilizer N applied to agriculture: (kg N/ha):", # 	Fertilizer N applied to agriculture:
 	 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
 # 	 	   sliderInput("FertVineyards", 
 # 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
 # 	 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
 	 	   sliderInput("FertRec", 
-	 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
+	 	   	    "Fertilizer N applied to rec/golf courses: (kg N/ha):", # 	Fertilizer N applied to rec/golf courses:
 	 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
 	 	   h4("Septic System & Cesspool Efficiencies"),
 	 	  	numericInput("HumanLoad",
-	 	   	     "Human N released per year (kg??)", #Need to confirm units
+	 	   	     "Per capita human N excretion rate: (kg??)", #Need to confirm units # 	Per capita human N excretion rate:
 	 	   	     min = 0.00, max = 10.00, value = 4.80),
 	 	      sliderInput("NotLostSpetic",
-	 	       	    "% NOT lost in septic tank",
+	 	       	    "% N transported from septic tank", 	# 	% N transported from septic tank
 	 	       	    min= 0.00, max = 1.00, value = 0.94),
 	 	       sliderInput("NotLostLeach",
-	 	       	    "% NOT lost in leaching fields",
+	 	       	    "%N transported through leaching field",  	# 	%N transported through leaching field
 	 	       	    min = 0.00, max = 1.00, value = 0.65),
 	 	       sliderInput("NotLostPlume",
-	 	       	    "% NOT lost in septic plume",
+	 	       	    "% waste transported from septic plumes:", 	# 	% waste transported from septic plumes:
 	 	       	    min = 0.00, max = 1.00, value = 0.66),
 	 	       sliderInput("NotLostAquifer",
-	 	       	    "% NOT lost in aquifer",
+	 	       	    "% N transported from aquifer:", 		# 	% N transported from aquifer:
 	 	       	    min = 0.00, max = 1.00, value = 0.65),
 	 	   h4("Sewage Treatment Plant Efficiencies"),
 	 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
-	 	       	    "Average annual wastewater N concentration (kg N/L)",
+	 	       	    "Average annual wastewater N concentration (kg N/L)", 
 	 	       	    min = 0, max = 1000, value = 100),
 	 	       sliderInput("TotAnFlow",   # need to reformat- numbers too large
-	 	       	    "Total average annual flow (L)",
+	 	       	    "Total average annual flow (L)", 
 	 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
 	 	       ),
 	 	column(9,
@@ -143,28 +143,26 @@ navbarMenu("Additional Model Parameters",
 	   	 	       h4("Atmospheric Loading Parameters"),
 	   	 	       h6("...insert some commentary on what these parameters mean and do..."),
 	   	 	       sliderInput("AtmNtransNatVeg",
-	   	 	       	    "% atmos N transported from Nat'l Veg Soils:",
+	   	 	       	    "% atmos N transported from Nat'l Veg Soils:", 	# 	% atmos N transported from Nat'l Veg Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.35),
 	   	 	       sliderInput("AtmNtransTurf",
-	   	 	       	    "% atmos N transported from Turf Soils::",
+	   	 	       	    "% atmos N transported from Turf Soils:", 		# 	% atmos N transported from Turf Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
 	   	 	       sliderInput("AtmNtransAg",
-	   	 	       	    "% atmos N transported from Agr. Soils:",
+	   	 	       	    "% atmos N transported from Agr. Soils:",		# 	% atmos N transported from Agr. Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
 	   	 	       sliderInput("NtransWetlands",
-	   	 	       	    "% atmos N transported from wetlands:",
+	   	 	       	    "% atmos N transported from wetlands:",		# 	% atmos N transported from wetlands
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
 	   	 	       sliderInput("NtransPonds",
-	   	 	       	    "% atmos N transported from freshwater ponds:",
+	   	 	       	    "% atmos N transported from freshwater ponds:",	# 	% atmos N transported from freshwater ponds
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
 	   	 	       sliderInput("AtmNtransImperv", # NLM oysterbay spreadsheet does not use this...
-	   	 	       	    "% atmos N transported from Impervious Soils (roof/driveway):",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+	   	 	       	    "% atmos N transported from Impervious Soils (roof/driveway):", #	% atmos N transported from Impervious Soils (roof/driveway):
+	   	 	       	    min = 0.00, max = 1.00, value = 0.38)
+	   	 	),
 	   	 	       
-	   	 	       sliderInput("DeNit",
-	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
-	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
-	   	 		),
+	   	 	       
 	   	 	column(9,
 	   	 	       h3("holy smokes"),
 	   	 	       h4("Should add a graphic with the atmospheric loads for each subwater shed (OR MANIPULATION/SCENARIO OF A WATERSHED")
@@ -179,13 +177,13 @@ navbarMenu("Additional Model Parameters",
 	   	 	       
 		   	 	h4("Fertilizer Transportation and biochemical processes resulting in denitriciation or loss"),
 	   	 	       sliderInput("FertTransTurf",
-	   	 	       	    "% N fertilizer transported from turf soils",
+	   	 	       	    "% of fertilizer N transported from Turf Soils:", # 	% of fertilizer N transported from Turf Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
 	   	 	       sliderInput("FertTransAg",
-	   	 	       	    "% fertilizer N transported from Agriculture",
+	   	 	       	    "% of fertilizer N transported from Agri Soils:",# 	% of fertilizer N transported from Agri Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
 	   	 	       sliderInput("FertTransRec",
-	   	 	       	    "% fertilizer N transported from recreational soils",
+	   	 	       	    "% of fertilizer N transported from Rec. Soils:",# 	% of fertilizer N transported from Rec. Soils:
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
 	   	 	       sliderInput("FertTransSeptic",
 	   	 	       	    "% fertilizer N transported from septic tanks",
