@@ -154,7 +154,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[7]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# parkArea
@@ -165,14 +165,14 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(df)
 			names(items)=items
-			selectInput("ParkArea", "Park Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ParkArea", "Park Area (ha):", items, selected = items[8]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 	
 # Data Table Output ------------------------------
 		# Output data table
 		output$filetable <- renderTable({
-			df <- filedata()
+			df <- data.frame(filedata())
 			if(is.null(df)){
 				return("Load data to see summary")
 			}
@@ -181,10 +181,10 @@ shinyServer( # this will be run each time a user changes something.
 
 		output$filetable2 <- renderTable({
 				
-			fd <- filedata()
+			fd <- data.frame(filedata())
 			if(is.null(fd)){
 				return("Load data to see summary")
-			}
+			} # If no table loaded into memory then return message- if loaded run below...
 			
 			# Function definitions for NLM 	-----	
 			# 	NLoad <- reactive({	
@@ -233,6 +233,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			
 			# Parameter mapping...
+			# UI controlled parameters
 			TDN <- input$AtmDepRate
 			ANTNV <- input$AtmNtransNatVeg
 			ATAg <- input$AtmNtransAg
@@ -241,22 +242,6 @@ shinyServer( # this will be run each time a user changes something.
 			FAgTran <- input$FertTransAg
 			FRecTran <- input$FertTransRec
 		   	TranT <- input$FertTransTurf
-			  
-			# User loaded areas - Read in on first tab and mapped out with uiOutput-renderOutput functions.
-			# fd == dataframe that is loaded in by user
-			# input$xxx == the column name of dataframe that is mapped to parameter XX. The [[ ]] function returns a vector 
-			TArea <- fd[[input$TurfArea]]
-			NVArea <- fd[[input$NatVegArea]]
-			RArea <- fd[[input$RecArea]]
-			LArea <- fd[[input$LawnArea]]
-			PArea <- fd[[input$ParkArea]]
-			AArea <- fd[[input$AgArea]]
-			AAArea <- fd[[input$ActiveAgArea]]
-			IArea <- fd[[input$ImpervArea]]
-			WArea <- fd[[input$WetlandsArea]]
-			WTWet <- fd[[input$NtransWetlands]]
-			PArea <- fd[[input$PondsArea]]
-			GArea <- fd[[input$GolfArea]]
 			# Fertilizer Loads
 			FertL <- input$FertLawns
 			FertPerc <- input$PercentHomes
@@ -271,70 +256,91 @@ shinyServer( # this will be run each time a user changes something.
 # 			input$NotLostLeach
 # 			input$NotLostPlume
 # 			input$NotLostAquifer
-# 			  
+			  
+			# User loaded spatial paramters (areas) 
+			#- Read in on first tab and mapped out with uiOutput-renderOutput functions.
+			# fd == dataframe that is loaded in by user
+			# input$xxx == the column name of dataframe that is mapped to parameter XX. 
+			# The [[ ]] function returns a vector (column) of values 
+			TArea <- fd[[input$TurfArea]]
+			NVArea <- fd[[input$NatVegArea]]
+			RArea <- fd[[input$RecArea]]
+			LArea <- fd[[input$LawnArea]]
+			PArea <- fd[[input$ParkArea]]
+			AArea <- fd[[input$AgArea]]
+			AAArea <- fd[[input$ActiveAgArea]]
+			IArea <- fd[[input$ImpervArea]]
+			WArea <- fd[[input$WetlandsArea]]
+			WTWet <- fd[[input$NtransWetlands]]
+			PArea <- fd[[input$PondsArea]]
+			GArea <- fd[[input$GolfArea]]
+			
+# 		
+		# Create blank object to store output
+		NLM <- NULL
 			  
 # Atmospheric Loads =============================================================
 		#a -good-
-		fd$AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
+		NLM$AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
 		
 		#b -good-
-		fd$AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
+		NLM$AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
 		
 		#c -good- 
-		fd$AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
+		NLM$AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
 		
 		#d -good- FOR NOW...
-		fd$AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+		NLM$AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
 		
 		#e -good-
-		fd$AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
+		NLM$AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
 		
 		#f -good-
-		fd$AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
+		NLM$AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
 		
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
-#		fd$TotalLoadAtmospheric <- ((AtmNatVeg() + AtmTurfRec() + AtmAg() + AtmImperv() + AtmWetlands() + AtmFreshWater())) %>% round(1)
+		NLM$TotalLoadAtmospheric <- (NLM$AtmNatVeg + NLM$AtmTurfRec + NLM$AtmAg + NLM$AtmImperv + NLM$AtmWetlands + NLM$AtmFreshWater) %>% round(1)
 		
 # Fertilizer Application Loads ===================================================		
 		
 		#g
-		fd$FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
+		NLM$FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
 		
 		#ActiveAg- new to the NLM_Oyster Bay Spreadsheet
 		#h 	Is this Active Ag only? Need to find out and/or add actvie ag.
-		fd$FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
+		NLM$FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
 		
 		#i
-		fd$FertGolf <- (FertG * GArea * FRecTran) %>% round(1)
+		NLM$FertGolf <- (FertG * GArea * FRecTran) %>% round(1)
 		
-		fd$FertParks <- (FertG * FRecTran * PArea) %>% round(1)
+		NLM$FertParks <- (FertG * FRecTran * PArea) %>% round(1)
 		
 
 	## Total Fertilixation Load
-#		fd$TotalFertLoad <- (FertTurf() + FertActiveAg() + FertGolf() + FertParks()) %>% round(1)
+		NLM$TotalFertLoad <- (NLM$FertTurf + NLM$FertActiveAg + NLM$FertGolf + NLM$FertParks) %>% round(1)
 		
 # Surface Loads- Fertilizer and Deposition ------------------------------------
 		#j
-		fd$SurfaceLoad <- ((TotalLoadAtmospheric() + TotalFertLoad()) * 0.39 * 0.65) %>% round(1)
+		NLM$SurfaceLoad <- ((NLM$TotalLoadAtmospheric + NLM$TotalFertLoad) * 0.39 * 0.65) %>% round(1)
 		
 		#k
-		fd$SepticLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		NLM$SepticLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
 		
 		#l
-		fd$CesspoolLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
+		NLM$CesspoolLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
 		
 		#m
-		fd$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
+		NLM$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
 		
 		
 # Total Nitrogen Loading to Estuary --------------------------------------------
-#		fd$NLoadTotal <- ((SurfaceLoad() + SepticLoad() + CesspoolLoad() + WasteWaterLoad()) %>% round(1))
+		NLM$NLoadTotal <- ((NLM$SurfaceLoad + NLM$SepticLoad + NLM$CesspoolLoad + NLM$WasteWaterLoad) %>% round(1))
 		
 
-# 	NLoad.outputs <- data.frame(TotalLoadAtmospheric(), TotalFertLoad())
-# 	NLoad.outputs
-		fd	
+
+		outdf <- data.frame(NLM)	
+		outdf
 })
 
 # Start of NLoad outputs----
