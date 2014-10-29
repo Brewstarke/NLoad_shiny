@@ -178,7 +178,51 @@ shinyServer( # this will be run each time a user changes something.
 			}
 			fd
 		})
-
+observe({
+	fd <- data.frame(filedata())
+	# Parameter mapping...
+	# UI controlled parameters
+	TDN <- input$AtmDepRate
+	ANTNV <- input$AtmNtransNatVeg
+	ATAg <- input$AtmNtransAg
+	ATImp <- input$AtmNtransImperv
+	TAP <- input$ThroughAquiferPonds
+	FAgTran <- input$FertTransAg
+	FRecTran <- input$FertTransRec
+	TranT <- input$FertTransTurf
+	# Fertilizer Loads
+	FertL <- input$FertLawns
+	FertPerc <- input$PercentHomes
+	DNit <- input$DeNit
+	FertG <- input$FertRec
+	FertAg <- input$FertAg
+	# Septic and Cesspools  
+	HL <- input$HumanLoad 
+	HSize <- 12 # input$HouseSize -- changed during debug
+	NHS <- 12 # input$NumbHomesSeptic -- changed during debug
+	# 			input$NotLostSpetic
+	# 			input$NotLostLeach
+	# 			input$NotLostPlume
+	# 			input$NotLostAquifer
+	
+	# User loaded spatial paramters (areas) 
+	#- Read in on first tab and mapped out with uiOutput-renderOutput functions.
+	# fd == dataframe that is loaded in by user
+	# input$xxx == the column name of dataframe that is mapped to parameter XX. 
+	# The ____$____$ function returns a vector (column) of values from the user loaded and selected dataframe
+	TArea <- fd$input$TurfArea
+	NVArea <- fd$input$NatVegArea
+	RArea <- fd$input$RecArea
+	LArea <- fd$input$LawnArea
+	PArea <- fd$input$ParkArea
+	AArea <- fd$input$AgArea 
+	AAArea <- fd$input$ActiveAgArea 
+	IArea <- fd$input$ImpervArea 
+	WArea <- fd$input$WetlandsArea 
+	WTWet <- fd$input$NtransWetlands 
+	PArea <- fd$input$PondsArea 
+	GArea <- fd$input$GolfArea 
+})
 		output$filetable2 <- renderTable({
 				
 			fd <- data.frame(filedata())
@@ -189,7 +233,6 @@ shinyServer( # this will be run each time a user changes something.
 			# Function definitions for NLM 	-----	
 			# 	NLoad <- reactive({	
 			
-#browser()			
 			# From NLM_OysterBay Spreadsheet\
 			#
 			# 	[Rainfall nitrate]:
@@ -231,50 +274,7 @@ shinyServer( # this will be run each time a user changes something.
 			# 	# of houses in low density residential areas:
 			# 	percent of onsite wastewater systems that are cesspools *** Make this a user datasheet loading input ***
 			
-			
-			# Parameter mapping...
-			# UI controlled parameters
-			TDN <- input$AtmDepRate
-			ANTNV <- input$AtmNtransNatVeg
-			ATAg <- input$AtmNtransAg
-			ATImp <- input$AtmNtransImperv
-			TAP <- input$ThroughAquiferPonds
-			FAgTran <- input$FertTransAg
-			FRecTran <- input$FertTransRec
-		   	TranT <- input$FertTransTurf
-			# Fertilizer Loads
-			FertL <- input$FertLawns
-			FertPerc <- input$PercentHomes
-			DNit <- input$DeNit
-			FertG <- input$FertRec
-			FertAg <- input$FertAg
-			# Septic and Cesspools  
-			HL <- input$HumanLoad 
-			HSize <- 12 # input$HouseSize -- changed during debug
-			NHS <- 12 # input$NumbHomesSeptic -- changed during debug
-# 			input$NotLostSpetic
-# 			input$NotLostLeach
-# 			input$NotLostPlume
-# 			input$NotLostAquifer
-			  
-			# User loaded spatial paramters (areas) 
-			#- Read in on first tab and mapped out with uiOutput-renderOutput functions.
-			# fd == dataframe that is loaded in by user
-			# input$xxx == the column name of dataframe that is mapped to parameter XX. 
-			# The ____$____$ function returns a vector (column) of values from the user loaded and selected dataframe
-			TArea <- fd$input$TurfArea
-			NVArea <- fd$input$NatVegArea
-			RArea <- fd$input$RecArea
-			LArea <- fd$input$LawnArea
-			PArea <- fd$input$ParkArea
-			AArea <- fd$input$AgArea 
-			AAArea <- fd$input$ActiveAgArea 
-			IArea <- fd$input$ImpervArea 
-			WArea <- fd$input$WetlandsArea 
-			WTWet <- fd$input$NtransWetlands 
-			PArea <- fd$input$PondsArea 
-			GArea <- fd$input$GolfArea 
-			
+		
 # 		
 		# Create blank object to store output
 		NLM <- NULL
