@@ -49,22 +49,22 @@ shinyServer( # this will be run each time a user changes something.
 #  These functions generate a user input (a select input) 
 		# Site
 		# input$Site
-		output$Site <- renderUI({  # need to create a site input for plots and other analysis.
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$Sites <- renderUI({  # need to create a site input for plots and other analysis.
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items <- names(df) 
+			items <- names(fd) 
 			names(items) <- items
 			selectInput("Site", "Site:" ,items, selected = items[1])
 			
 		})
 		# wetlands
 		# input$WetlandsArea
-		output$WetlandsArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$WetlandsAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = items[3]) 
 			# inputID links to the /scratchspace.R input list at top.
@@ -72,98 +72,98 @@ shinyServer( # this will be run each time a user changes something.
 		})
 		# ponds
 		# input$PondsArea
-		output$PondsArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
-			items=names(df)
+		output$PondsAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
+			items=names(fd)
 			names(items)=items
 			selectInput("PondsArea", "Ponds Area (ha):", items, selected = items[3]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# natural vegetation
 		# input$NatVegArea
-		output$NatVegArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$NatVegAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# turfArea
 		# input$TurfArea
-		output$TurfArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$TurfAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("TurfArea", "Turf Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# agArea
 		# input$AgArea
-		output$AgArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$AgAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("AgArea", "Agricultural Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# impervArea
 		# input$ImpervArea
-		output$ImpervArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$ImpervAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# activeAgArea
 		# input$ActiveAgArea
-		output$ActiveAgArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$ActiveAgAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# recArea
 		# input$RecArea
-		output$RecArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$RecAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("RecArea", "Recreational Areas (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# lawnArea
 		# input$LawnArea
-		output$LawnArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$LawnAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[7]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# parkArea
 		# input$ParkArea
-		output$ParkArea <- renderUI({
-			df <-filedata()
-			if (is.null(df)) return(NULL)
+		output$ParkAreas <- renderUI({
+			fd <-filedata()
+			if (is.null(fd)) return(NULL)
 			
-			items=names(df)
+			items=names(fd)
 			names(items)=items
 			selectInput("ParkArea", "Park Area (ha):", items, selected = items[8]) # inputID links to the /scratchspace.R input list at top.
 			
@@ -172,11 +172,11 @@ shinyServer( # this will be run each time a user changes something.
 # Data Table Output ------------------------------
 		# Output data table
 		output$filetable <- renderTable({
-			df <- data.frame(filedata())
-			if(is.null(df)){
+			fd <- data.frame(filedata())
+			if(is.null(fd)){
 				return("Load data to see summary")
 			}
-			df
+			fd
 		})
 
 		output$filetable2 <- renderTable({
@@ -189,7 +189,7 @@ shinyServer( # this will be run each time a user changes something.
 			# Function definitions for NLM 	-----	
 			# 	NLoad <- reactive({	
 			
-			
+#browser()			
 			# From NLM_OysterBay Spreadsheet\
 			#
 			# 	[Rainfall nitrate]:
@@ -250,8 +250,8 @@ shinyServer( # this will be run each time a user changes something.
 			FertAg <- input$FertAg
 			# Septic and Cesspools  
 			HL <- input$HumanLoad 
-			HSize <- input$HouseSize
-			NHS <- input$NumbHomesSeptic
+			HSize <- 12 # input$HouseSize -- changed during debug
+			NHS <- 12 # input$NumbHomesSeptic -- changed during debug
 # 			input$NotLostSpetic
 # 			input$NotLostLeach
 # 			input$NotLostPlume
@@ -261,19 +261,19 @@ shinyServer( # this will be run each time a user changes something.
 			#- Read in on first tab and mapped out with uiOutput-renderOutput functions.
 			# fd == dataframe that is loaded in by user
 			# input$xxx == the column name of dataframe that is mapped to parameter XX. 
-			# The [[ ]] function returns a vector (column) of values 
-			TArea <- fd[[input$TurfArea]]
-			NVArea <- fd[[input$NatVegArea]]
-			RArea <- fd[[input$RecArea]]
-			LArea <- fd[[input$LawnArea]]
-			PArea <- fd[[input$ParkArea]]
-			AArea <- fd[[input$AgArea]]
-			AAArea <- fd[[input$ActiveAgArea]]
-			IArea <- fd[[input$ImpervArea]]
-			WArea <- fd[[input$WetlandsArea]]
-			WTWet <- fd[[input$NtransWetlands]]
-			PArea <- fd[[input$PondsArea]]
-			GArea <- fd[[input$GolfArea]]
+			# The ____$____$ function returns a vector (column) of values from the user loaded and selected dataframe
+			TArea <- fd$input$TurfArea
+			NVArea <- fd$input$NatVegArea
+			RArea <- fd$input$RecArea
+			LArea <- fd$input$LawnArea
+			PArea <- fd$input$ParkArea
+			AArea <- fd$input$AgArea 
+			AAArea <- fd$input$ActiveAgArea 
+			IArea <- fd$input$ImpervArea 
+			WArea <- fd$input$WetlandsArea 
+			WTWet <- fd$input$NtransWetlands 
+			PArea <- fd$input$PondsArea 
+			GArea <- fd$input$GolfArea 
 			
 # 		
 		# Create blank object to store output
@@ -281,44 +281,44 @@ shinyServer( # this will be run each time a user changes something.
 			  
 # Atmospheric Loads =============================================================
 		#a -good-
-		NLM$AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
+		AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
 		
 		#b -good-
-		NLM$AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
+		AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
 		
 		#c -good- 
-		NLM$AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
+		AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
 		
 		#d -good- FOR NOW...
-		NLM$AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+		AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
 		
 		#e -good-
-		NLM$AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
+		AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
 		
 		#f -good-
-		NLM$AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
+		AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
 		
 	
 	## Total N load to estuary sourced from Atmospheric Deposition
-		NLM$TotalLoadAtmospheric <- (NLM$AtmNatVeg + NLM$AtmTurfRec + NLM$AtmAg + NLM$AtmImperv + NLM$AtmWetlands + NLM$AtmFreshWater) %>% round(1)
+		NLM$TotalLoadAtmospheric <- (AtmNatVeg + AtmTurfRec + AtmAg + AtmImperv + AtmWetlands + AtmFreshWater) %>% round(1)
 		
 # Fertilizer Application Loads ===================================================		
 		
 		#g
-		NLM$FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
+		FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
 		
 		#ActiveAg- new to the NLM_Oyster Bay Spreadsheet
 		#h 	Is this Active Ag only? Need to find out and/or add actvie ag.
-		NLM$FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
+		FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
 		
 		#i
-		NLM$FertGolf <- (FertG * GArea * FRecTran) %>% round(1)
+		FertGolf <- (FertG * GArea * FRecTran) %>% round(1)
 		
-		NLM$FertParks <- (FertG * FRecTran * PArea) %>% round(1)
+		FertParks <- (FertG * FRecTran * PArea) %>% round(1)
 		
 
 	## Total Fertilixation Load
-		NLM$TotalFertLoad <- (NLM$FertTurf + NLM$FertActiveAg + NLM$FertGolf + NLM$FertParks) %>% round(1)
+		NLM$TotalFertLoad <- (FertTurf + FertActiveAg + FertGolf + FertParks) %>% round(1)
 		
 # Surface Loads- Fertilizer and Deposition ------------------------------------
 		#j
@@ -331,7 +331,7 @@ shinyServer( # this will be run each time a user changes something.
 		NLM$CesspoolLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
 		
 		#m
-		NLM$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
+##		NLM$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
 		
 		
 # Total Nitrogen Loading to Estuary --------------------------------------------
@@ -339,8 +339,8 @@ shinyServer( # this will be run each time a user changes something.
 		
 
 
-		outdf <- data.frame(NLM)	
-		outdf
+		outfd <- data.frame(NLM)	
+		outfd
 })
 
 # Start of NLoad outputs----
@@ -349,12 +349,12 @@ shinyServer( # this will be run each time a user changes something.
 # Data output summaries ----		
 # Output data summaries- mainly used for diagnostics for model building at this point.
 # 		output$filesummary <- renderTable({
-# 			# 				df2 <- filedata()
-# 			# 				if(is.null(df2)){
+# 			# 				fd2 <- filedata()
+# 			# 				if(is.null(fd2)){
 # 			# 					return("Load data to see summary")
 # 			# 				}
-# 			# 				#colMeans(df[2:length(df)])
-# 			# 				NVArea <- df2[input$NatVegArea]
+# 			# 				#colMeans(fd[2:length(fd)])
+# 			# 				NVArea <- fd2[input$NatVegArea]
 # 			# 				NVArea
 # 			NLoad()
 # 			NLoad.outputs
@@ -363,48 +363,48 @@ shinyServer( # this will be run each time a user changes something.
 
 
 # Shiny Plots ----
-	# Stacked bar plot- absolute values- dimple plots 
-	output$HStackBar <- renderChart2({
-		# Stacked horizontal plot Total loads descending
-		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
-		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
-		HSbar$xAxis(type= "addMeasureAxis")
-		HSbar$legend(
-			x = 0, 
-			y = 0, 
-			width = 500, 
-			height = 1500,
-			horizontalAlign = "center")
-		HSbar$defaultColors(brewer.pal(6, "Set1"))
-		return(HSbar)
-	})
-
-	# Stacked horizontal percentage 
-	output$HStackPct <- renderChart2({
-		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
-		HSbarPct$yAxis(type= "addCategoryAxis")
-		HSbarPct$xAxis(type= "addPctAxis")
-		HSbarPct$legend(
-			x = 0, 
-			y = 0, 
-			width = 700, 
-			height = 700,
-			horizontalAlign = "right")
-		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
-		return(HSbarPct)
-		
-	})
-	
-	output$plot  <- renderChart2({
-	
-		plot1 <- nPlot(value ~ subwatershed_code,
-			       group = "variable",
-			       data = NLoads.Melt,
-			       type = "multiBarHorizontalChart")
-		plot1$params$height = 600
-		plot1$params$dom  <-  "plot"
-		return(plot1)
-	})
+# 	# Stacked bar plot- absolute values- dimple plots 
+# 	output$HStackBar <- renderChart2({
+# 		# Stacked horizontal plot Total loads descending
+# 		HSbar <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+# 		HSbar$yAxis(type= "addCategoryAxis", orderRule = 'rev(value)')
+# 		HSbar$xAxis(type= "addMeasureAxis")
+# 		HSbar$legend(
+# 			x = 0, 
+# 			y = 0, 
+# 			width = 500, 
+# 			height = 1500,
+# 			horizontalAlign = "center")
+# 		HSbar$defaultColors(brewer.pal(6, "Set1"))
+# 		return(HSbar)
+# 	})
+# 
+# 	# Stacked horizontal percentage 
+# 	output$HStackPct <- renderChart2({
+# 		HSbarPct <- dPlot(y = "subwatershed_code", x = "value", data= NLoads.Melt, groups= "variable", type = "bar", height = 700, width= 700)
+# 		HSbarPct$yAxis(type= "addCategoryAxis")
+# 		HSbarPct$xAxis(type= "addPctAxis")
+# 		HSbarPct$legend(
+# 			x = 0, 
+# 			y = 0, 
+# 			width = 700, 
+# 			height = 700,
+# 			horizontalAlign = "right")
+# 		HSbarPct$defaultColors(brewer.pal(6, "Set1"))
+# 		return(HSbarPct)
+# 		
+# 	})
+# 	
+# 	output$plot  <- renderChart2({
+# 	
+# 		plot1 <- nPlot(value ~ subwatershed_code,
+# 			       group = "variable",
+# 			       data = NLoads.Melt,
+# 			       type = "multiBarHorizontalChart")
+# 		plot1$params$height = 600
+# 		plot1$params$dom  <-  "plot"
+# 		return(plot1)
+# 	})
 
 
 
