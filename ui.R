@@ -73,7 +73,7 @@ tabPanel("Data Loading",
     	column(8,
     	       h4("Geographic Paramters read in by user"),
     	       tableOutput("filetable"),
-    	       tableOutput("filetable2")
+    	       tableOutput("Nloads")
     	       )
 	    )
 	),
