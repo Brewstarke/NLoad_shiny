@@ -18,14 +18,14 @@ library(RColorBrewer)
 shinyServer( # this will be run each time a user changes something.
 	function(input, output, session) {
 		
-		# Datafile input
+# Datafile load
 	filedata <- reactive({
 			infile <- input$datafile
 			if (is.null(infile)) {
 				# User has not uploaded a file yet - from http://bl.ocks.org/psychemedia/9690079
-				return( "Load data...")# Output message in html....to ui.R
+				return( "Load spatial data to get started...")# Output message in html....to ui.R
 			}
-			data.frame(read.csv(infile$datapath, header = TRUE))
+			read.csv(infile$datapath, header = TRUE)
 		})
 		
 # Data mapping -------------------------------------------------
@@ -81,7 +81,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items <- names(fd) 
 			names(items) <- items
-			selectInput("Site", "Site:" ,items, selected = items[1])
+			updateSelectInput(session, "Site", "Site:" ,items, selected = items[1])
 			
 		})
 		# wetlands
@@ -92,7 +92,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("WetlandsArea", "Wetlands Area (ha):", items, selected = items[3]) 
+			updateSelectInput(session, "WetlandsArea", "Wetlands Area (ha):", items, selected = items[3]) 
 			# inputID links to the /scratchspace.R input list at top.
 			
 		})
@@ -103,7 +103,7 @@ shinyServer( # this will be run each time a user changes something.
 			if (is.null(fd)) return(NULL)
 			items=names(fd)
 			names(items)=items
-			selectInput("PondsArea", "Ponds Area (ha):", items, selected = items[3]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "PondsArea", "Ponds Area (ha):", items, selected = items[3]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# natural vegetation
@@ -114,7 +114,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "NatVegArea", "Natural Vegetation Area (ha):", items, selected = items[4]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# turfArea
@@ -125,7 +125,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("TurfArea", "Turf Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "TurfArea", "Turf Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# agArea
@@ -136,7 +136,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("AgArea", "Agricultural Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "AgArea", "Agricultural Area (ha):", items, selected = items[5]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# impervArea
@@ -147,7 +147,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "ImpervArea", "Impervious Surface Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# activeAgArea
@@ -158,7 +158,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "ActiveAgArea", "Active Agricultral Area (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# recArea
@@ -169,7 +169,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("RecArea", "Recreational Areas (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "RecArea", "Recreational Areas (ha):", items, selected = items[6]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# lawnArea
@@ -180,7 +180,7 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("LawnArea", "Lawn Area (ha):", items, selected = items[7]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "LawnArea", "Lawn Area (ha):", items, selected = items[7]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 		# parkArea
@@ -191,12 +191,12 @@ shinyServer( # this will be run each time a user changes something.
 			
 			items=names(fd)
 			names(items)=items
-			selectInput("ParkArea", "Park Area (ha):", items, selected = items[8]) # inputID links to the /scratchspace.R input list at top.
+			updateSelectInput(session, "ParkArea", "Park Area (ha):", items, selected = items[8]) # inputID links to the /scratchspace.R input list at top.
 			
 		})
 	
-# Data Table Output ------------------------------
-	# Output data table
+# Data Table Outputs ------------------------------
+	# Output data table- first page
 	output$filetable <- renderDataTable({
 			fd <- data.frame(filedata())
 			if(is.null(fd)){
@@ -211,7 +211,11 @@ shinyServer( # this will be run each time a user changes something.
 			if(is.null(fd)){
 				return("Load data to see summary")
 			} # If no table loaded into memory then return message- if loaded run below...
+			NLM()
 			
+			
+	})
+	target <- reactive({toString(input$value)})
 # Function definitions for NLM 	-----	
 			# 	NLoad <- reactive({	
 			
@@ -257,7 +261,8 @@ shinyServer( # this will be run each time a user changes something.
 			# 	percent of onsite wastewater systems that are cesspools *** Make this a user datasheet loading input ***
 			
 		
-# ----		
+# ----
+	NLM <- reactive({
 		fd <- data.frame(filedata())
 		# Parameter mapping...
 		# UI controlled parameters
@@ -289,15 +294,27 @@ shinyServer( # this will be run each time a user changes something.
 		# fd == dataframe that is loaded in by user
 		# input$xxx == the column name of dataframe that is mapped to parameter XX. 
 		# The ____$____$ function returns a vector (column) of values from the user loaded and selected dataframe
-		TArea <- fd$input$TurfArea
-		NVArea <- fd$input$NatVegArea
-		RArea <- fd$input$RecArea
-		LArea <- fd$input$LawnArea
-		PArea <- fd$input$ParkArea
-		AArea <- fd$input$AgArea 
-		AAArea <- fd$input$ActiveAgArea 
-		IArea <- fd$input$ImpervArea 
-		WArea <- fd$input$WetlandsArea 
+## These inputs are passing NULLs- need to fix this!!		
+	# target <- reactive({toString(input$value)}) suggested by Rhamath V
+		ta <- reactive({toString(input$TurfArea)})
+		nva <- reactive({toString(input$NatVegArea)})
+		ra <- reactive({toString(input$RecArea)})
+		la <- reactive({toString(input$LawnArea)})
+		pa <- reactive({toString(input$ParkArea)})
+		aa <- reactive({toString(input$AgArea)})
+		aaa <- reactive({toString(input$ActiveAgArea)})
+		ia <- reactive({toString(input$ImpervArea)})
+		wa <- reactive({toString(input$WetlandsArea)})
+
+		TArea <- fd$ta()
+		NVArea <- fd$nva()
+		RArea <- fd$ra()
+		LArea <- fd$la()
+		PArea <- fd$pa()
+		AArea <- fd$aa()
+		AAArea <- fd$aaa()
+		IArea <- fd$ia()
+		WArea <- fd$wa()
 		# Create blank object to store output
 		NLM <- NULL
 			  
@@ -338,10 +355,10 @@ shinyServer( # this will be run each time a user changes something.
 		#m
 ##		NLM$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
 # Total Nitrogen Loading to Estuary --------------------------------------------
-		NLM$NLoadTotal <- ((NLM$SurfaceLoad + NLM$SepticLoad + NLM$CesspoolLoad + NLM$WasteWaterLoad) %>% round(1))
+		NLM$NLoadTotal <- (NLM$SurfaceLoad + NLM$SepticLoad + NLM$CesspoolLoad + NLM$WasteWaterLoad) 
 
-		outfd <- data.frame(NLM)	
-		outfd
+		outNLM <- data.frame(NLM)	
+		outNLM
 })
 
 # Start of NLoad outputs----
