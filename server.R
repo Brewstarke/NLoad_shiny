@@ -16,7 +16,7 @@ library(RColorBrewer)
 
 # Shiny Server ------------------------------------------------------------------
 shinyServer( # this will be run each time a user changes something.
-	function(input, output) {
+	function(input, output, session) {
 		
 		# Datafile input
 	filedata <- reactive({

@@ -1,11 +1,3 @@
-#### Shiny Server
-#
-# NLM Model running on shiny
-# Runs basic Nitrogen loading models from data read in by user
-# Sensitivity analysis is possible by manipulating the many parameters 
-#
-#
-####
 
 # From NLM_OysterBay Spreadsheet\
 #
@@ -72,8 +64,8 @@ tabPanel("Data Loading",
     	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
     	column(8,
     	       h4("Geographic Paramters read in by user"),
-    	       tableOutput("filetable"),
-    	       tableOutput("filetable2")
+    	       dataTableOutput("filetable"),
+    	       dataTableOutput("filetable2")
     	       )
 	    )
 	),
