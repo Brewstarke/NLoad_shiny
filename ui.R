@@ -159,7 +159,8 @@ navbarMenu("Additional Model Parameters",
 	   	 		),
 	   	 	column(9,
 	   	 	       h3("holy smokes"),
-	   	 	       h4("Should add a graphic with the atmospheric loads for each subwater shed (OR MANIPULATION/SCENARIO OF A WATERSHED")
+	   	 	       h4("Should add a graphic with the atmospheric loads for each subwater shed (OR MANIPULATION/SCENARIO OF A WATERSHED"),
+	   	 	       dataTableOutput("filetable2")
 	   	 		)
 	   		 )
 	   	),
