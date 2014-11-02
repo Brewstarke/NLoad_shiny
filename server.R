@@ -16,7 +16,7 @@ library(RColorBrewer)
 
 # Shiny Server ------------------------------------------------------------------
 shinyServer( # this will be run each time a user changes something.
-	function(input, output, session) {
+	function(input, output) {
 		
 # Datafile load
 	filedata <- reactive({
@@ -310,8 +310,8 @@ NLMout <- reactive({
 		FertAg <- input$FertAg
 		# Septic and Cesspools  
 		HL <- input$HumanLoad 
-		HSize <- 12   # input$HouseSize -- changed during debug
-		NHS <- 12     # input$NumbHomesSeptic -- changed during debug
+		HSize <- input$HouseSize
+		NHS <- input$NumbHomesSeptic
 		WTWet <- 12
 		# 			input$NotLostSpetic
 		# 			input$NotLostLeach
@@ -363,6 +363,16 @@ NLMout <- reactive({
 		outNLM <- data.frame(NLM)	
 		outNLM
 })
+
+
+# TEST #
+# for interactivity-
+	output$NLMtest <- renderDataTable({
+		if(is.null(filedata())){
+			return("Load data to see ouputs")
+		}
+		NLMout()
+	})
 
 # Start of NLoad outputs----
 
