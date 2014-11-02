@@ -6,7 +6,8 @@
 #
 #
 ####
-
+library(devtools)
+install_github('rCharts', 'ramnathv')
 library(shiny)
 library(reshape2)
 library(dplyr)
