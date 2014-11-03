@@ -40,93 +40,93 @@
 # 	# of houses in low density residential areas:
 # 	percent of onsite wastewater systems that are cesspools
 
+
+library(shiny)
+library(reshape2)
+library(rCharts)
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+
+
 shinyUI(navbarPage("N-Load",
 		   #theme("bootstrap.css",
 # Data Loading Tab ---- 
-tabPanel("Data Loading", 
-    fluidRow(
-    	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
-    	column(2,
-    	       h3("Load in data file here:"),
-    	       fileInput('datafile', 'Choose CSV file',
-    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
-    	       uiOutput("Sites"),
-    	       uiOutput("WetlandsAreas"),
-    	       uiOutput("PondsAreas"),
-    	       uiOutput("NatVegAreas"),
-    	       uiOutput("TurfAreas"),
-    	       uiOutput("AgAreas"),
-    	       uiOutput("ImpervAreas"),
-    	       uiOutput("ActiveAgAreas"),
-    	       uiOutput("RecAreas"),
-    	       uiOutput("LawnAreas"),
-    	       uiOutput("ParkAreas")
-    	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
-    	column(8,
-    	       h4("Geographic Paramters read in by user"),
-    	       dataTableOutput("filetable"),
-    	       dataTableOutput("filetable2")
-    	       )
-	    )
-	),
-# # Trial Runs Tab ----
-tabPanel("Trial Runs",
-	 fluidRow(
-	 	tags$h6("This is a test of the emergency broadcast system..."),
-	 	column(6,
-	 	       h5("holy shit if this works...")),
-	 	column(6,
-	 	       h4("Put out puts here in text form..."))
-		)
-	 ),
+	tabPanel("Data Loading", 
+	    fluidRow(
+	    	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
+	    	column(2,
+	    	       h3("Load in data file here:"),
+	    	       fileInput('datafile', 'Choose CSV file',
+	    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
+	    	       uiOutput("Sites"),
+	    	       uiOutput("WetlandsAreas"),
+	    	       uiOutput("PondsAreas"),
+	    	       uiOutput("NatVegAreas"),
+	    	       uiOutput("TurfAreas"),
+	    	       uiOutput("AgAreas"),
+	    	       uiOutput("ImpervAreas"),
+	    	       uiOutput("ActiveAgAreas"),
+	    	       uiOutput("RecAreas"),
+	    	       uiOutput("LawnAreas"),
+	    	       uiOutput("ParkAreas")
+	    	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
+	    	column(8,
+	    	       h4("Geographic Paramters read in by user"),
+	    	       dataTableOutput("filetable"),
+	    	       dataTableOutput("filetable2")
+	    	       )
+		    )
+		),
 # Wastewater Parameters ----
-tabPanel("Direct Human Inputs",
-	 fluidRow(
-	 	column(3,
-	 	   h4("Direct Application of fertilizers"),
-	 	       sliderInput("PercentHomes",
-	 	       	    "% of homes that use fertilizer",
-	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	 	   sliderInput("FertLawns",
-	 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
-	 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
-	 	   sliderInput("FertAg", 
-	 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
-	 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
-# 	 	   sliderInput("FertVineyards", 
-# 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
-# 	 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
-	 	   sliderInput("FertRec", 
-	 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
-	 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
-	 	   h4("Septic System & Cesspool Efficiencies"),
-	 	  	numericInput("HumanLoad",
-	 	   	     "Human N released per year (kg??)", #Need to confirm units
-	 	   	     min = 0.00, max = 10.00, value = 4.80),
-	 	      sliderInput("NotLostSpetic",
-	 	       	    "% NOT lost in septic tank",
-	 	       	    min= 0.00, max = 1.00, value = 0.94),
-	 	       sliderInput("NotLostLeach",
-	 	       	    "% NOT lost in leaching fields",
-	 	       	    min = 0.00, max = 1.00, value = 0.65),
-	 	       sliderInput("NotLostPlume",
-	 	       	    "% NOT lost in septic plume",
-	 	       	    min = 0.00, max = 1.00, value = 0.66),
-	 	       sliderInput("NotLostAquifer",
-	 	       	    "% NOT lost in aquifer",
-	 	       	    min = 0.00, max = 1.00, value = 0.65),
-	 	   h4("Sewage Treatment Plant Efficiencies"),
-	 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
-	 	       	    "Average annual wastewater N concentration (kg N/L)",
-	 	       	    min = 0, max = 1000, value = 100),
-	 	       sliderInput("TotAnFlow",   # need to reformat- numbers too large
-	 	       	    "Total average annual flow (L)",
-	 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
-	 	       ),
-	 	column(9,
-	 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario"))
-	 	)
-	  ),
+	tabPanel("Direct Human Inputs",
+		 fluidRow(
+		 	column(3,
+		 	   h4("Direct Application of fertilizers"),
+		 	       sliderInput("PercentHomes",
+		 	       	    "% of homes that use fertilizer",
+		 	       	    min = 0.00, max = 1.00, value = 0.49),
+		 	   sliderInput("FertLawns",
+		 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
+		 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
+		 	   sliderInput("FertAg", 
+		 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
+		 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
+# 	 	 	   sliderInput("FertVineyards", 
+# 	 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
+# 	 	 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
+		 	   sliderInput("FertRec", 
+		 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
+		 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
+		 	   h4("Septic System & Cesspool Efficiencies"),
+		 	  	numericInput("HumanLoad",
+		 	   	     "Human N released per year (kg??)", #Need to confirm units
+		 	   	     min = 0.00, max = 10.00, value = 4.80),
+		 	      sliderInput("NotLostSpetic",
+		 	       	    "% NOT lost in septic tank",
+		 	       	    min= 0.00, max = 1.00, value = 0.94),
+		 	       sliderInput("NotLostLeach",
+		 	       	    "% NOT lost in leaching fields",
+		 	       	    min = 0.00, max = 1.00, value = 0.65),
+		 	       sliderInput("NotLostPlume",
+		 	       	    "% NOT lost in septic plume",
+		 	       	    min = 0.00, max = 1.00, value = 0.66),
+		 	       sliderInput("NotLostAquifer",
+		 	       	    "% NOT lost in aquifer",
+		 	       	    min = 0.00, max = 1.00, value = 0.65),
+		 	   h4("Sewage Treatment Plant Efficiencies"),
+		 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
+		 	       	    "Average annual wastewater N concentration (kg N/L)",
+		 	       	    min = 0, max = 1000, value = 100),
+		 	       sliderInput("TotAnFlow",   # need to reformat- numbers too large
+		 	       	    "Total average annual flow (L)",
+		 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
+		 	       ),
+		 	column(9,
+		 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario")
+		 	       )
+		 	)
+		  ),
 # Less Active Parameters ----
 navbarMenu("Additional Model Parameters", 
 	   tabPanel("Atmospheric Loading Parameters",
@@ -170,7 +170,7 @@ navbarMenu("Additional Model Parameters",
 	   	 	column(3, 
 	   	 	       # transportation parameter UI inputs
 	   	 	       
-		   	 	h4("Fertilizer Transportation and biochemical processes resulting in denitriciation or loss"),
+		   	h4("Fertilizer Transportation and biochemical processes resulting in denitriciation or loss"),
 	   	 	       sliderInput("FertTransTurf",
 	   	 	       	    "% N fertilizer transported from turf soils",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
@@ -195,7 +195,7 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("FertTransAquifer",
 	   	 	       	    "% fertilizer N transported from aquifer",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.61),
-	   	 	    h5("Throughput to the aquifer"),
+	   	 	h5("Throughput to the aquifer"),
 		   	 	sliderInput("ThroughAquiferPonds",
 	   	 	       	    "Throughput to the aquifer from ponds",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.44),
@@ -204,7 +204,8 @@ navbarMenu("Additional Model Parameters",
 	   	 	       	    min = 0.00, max = 1.00, value= 0.22)
 	   	 		),
 	   	 	column(9,
-	   	 	       h4("Not sure what to put here. Graphic of how this transportation works??"))
+	   	 	       h4("Not sure what to put here. Graphic of how this transportation works??")
+	   	 	       )
 	   	 	)
 	   	),
 # ---> Physical loading parameters ----
@@ -221,21 +222,22 @@ navbarMenu("Additional Model Parameters",
 		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1)
 	   			),
 		   	column(9,
-		   	       h4("might not be worth keeping this tab around...."))
+		   	       h4("might not be worth keeping this tab around....")
+		   	       )
 	   		)
 		)
-	
-	) ,
+	),
 	   
 # Output Summary Tab ----
 tabPanel("Loading Sources",
 	 fluidRow(
 	 	column(6,
 	 	       h4("Distribution of N loading by sub-watershed"),
-	 	       showOutput("HStackBar", "dimple")),
+# 	 	       showOutput("HStackBar", "dimple")),
 	 	column(6,
-	 	       h4("Proportions by source"),
-	 	       showOutput("HStackPct", "dimple"))
+	 	       h4("Proportions by source-"),
+	 	       h5("plot goes here...")
+# 	 	       showOutput("HStackPct", "dimple"))
 	 	)
 	),
 # # Output Summary Tab #2 ----
@@ -243,7 +245,9 @@ tabPanel("Distribution of Loads",
 	fluidRow(
 		column(12,
 		       h4("Distribution of N loads to Peconics- Interactive...."),
-		       showOutput("plot", "nvd3"))
+		       h5("plot goes here...")
+# 		       showOutput("plot", "nvd3")
+)
 		)
 	)
 #----
@@ -251,6 +255,6 @@ tabPanel("Distribution of Loads",
 )
 
 
-
+))
 
 	 
