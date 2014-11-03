@@ -47,6 +47,7 @@ library(rCharts)
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
+library(rjson)
 
 
 shinyUI(navbarPage("N-Load",
@@ -233,11 +234,13 @@ tabPanel("Loading Sources",
 	 fluidRow(
 	 	column(6,
 	 	       h4("Distribution of N loading by sub-watershed"),
-# 	 	       showOutput("HStackBar", "dimple")),
+ 	 	       showOutput("HStackBar", "dimple")
+	 	       ),
 	 	column(6,
 	 	       h4("Proportions by source-"),
-	 	       h5("plot goes here...")
-# 	 	       showOutput("HStackPct", "dimple"))
+	 	       h5("plot goes here..."),
+ 	 	       showOutput("HStackPct", "dimple")
+	 	       )
 	 	)
 	),
 # # Output Summary Tab #2 ----
@@ -246,8 +249,8 @@ tabPanel("Distribution of Loads",
 		column(12,
 		       h4("Distribution of N loads to Peconics- Interactive...."),
 		       h5("plot goes here...")
-# 		       showOutput("plot", "nvd3")
-)
+#		       showOutput("plot", "nvd3")
+		)
 		)
 	)
 #----
@@ -255,6 +258,6 @@ tabPanel("Distribution of Loads",
 )
 
 
-))
+
 
 	 
