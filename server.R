@@ -166,7 +166,26 @@ shinyServer( # this will be run each time a user changes something.
 		if (is.null(filedata())) return(NULL)
 			selectInput("ParkArea", "Park Area (ha):", mappingNames(), selected = mappingNames()[12]) # inputID links to the /scratchspace.R input list at top.
 		})
+# uiOutput("Resd>200m"),
+	output$Resd>200ms <- renderUI({
+		if (is.null(filedata())) return(NULL)
+			selectInput("Resd>200m", "No. of Residences located >200m from the water:", mappingNames(), selected = mappingNames()[13]) # inputID links to the /scratchspace.R input list at top.
+	})
 	
+# uiOutput("Resd<200ms"),
+	output$Resd<200ms <- renderUI({
+		if (is.null(filedata())) return(NULL)
+		selectInput("Resd<200m", "No. of Residences located <200m from the water:", mappingNames(), selected = mappingNames()[14]) # inputID links to the /scratchspace.R input list at top.
+	})
+
+# uiOutput("persperhomes")
+	output$persperhomes <- renderUI({
+		if (is.null(filedata())) return(NULL)
+		selectInput("perperhome", "Average number of people per home:", mappingNames(), selected = mappingNames()[15]) # inputID links to the /scratchspace.R input list at top.
+	})
+
+
+
 # Data Table Outputs ------------------------------
 	# Output data table- first page
 # Function definitions for NLM 	-----	
