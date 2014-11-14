@@ -70,7 +70,11 @@ shinyUI(navbarPage("N-Load",
 	    	       uiOutput("ActiveAgAreas"),
 	    	       uiOutput("RecAreas"),
 	    	       uiOutput("LawnAreas"),
-	    	       uiOutput("ParkAreas")
+	    	       uiOutput("ParkAreas"),
+	    	       uiOutput("ResdGT200ms"),
+	    	       uiOutput("ResdLT200ms"),
+	    	       uiOutput("persperhomes")
+	    	       
 	    	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
 	    	column(8,
 	    	       h4("Geographic Paramters read in by user"),

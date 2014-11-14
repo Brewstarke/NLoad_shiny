@@ -167,15 +167,15 @@ shinyServer( # this will be run each time a user changes something.
 			selectInput("ParkArea", "Park Area (ha):", mappingNames(), selected = mappingNames()[12]) # inputID links to the /scratchspace.R input list at top.
 		})
 # uiOutput("Resd>200m"),
-	output$Resd>200ms <- renderUI({
+	output$ResdGT200ms <- renderUI({
 		if (is.null(filedata())) return(NULL)
-			selectInput("Resd>200m", "No. of Residences located >200m from the water:", mappingNames(), selected = mappingNames()[13]) # inputID links to the /scratchspace.R input list at top.
+			selectInput("ResdGT200m", "No. of Residences located greater than 200m from the water:", mappingNames(), selected = mappingNames()[13]) # inputID links to the /scratchspace.R input list at top.
 	})
 	
 # uiOutput("Resd<200ms"),
-	output$Resd<200ms <- renderUI({
+	output$ResdLT200ms <- renderUI({
 		if (is.null(filedata())) return(NULL)
-		selectInput("Resd<200m", "No. of Residences located <200m from the water:", mappingNames(), selected = mappingNames()[14]) # inputID links to the /scratchspace.R input list at top.
+		selectInput("ResdLT200m", "No. of Residences located less than 200m from the water:", mappingNames(), selected = mappingNames()[14]) # inputID links to the /scratchspace.R input list at top.
 	})
 
 # uiOutput("persperhomes")
@@ -256,6 +256,8 @@ shinyServer( # this will be run each time a user changes something.
 			AAArea <-  fd[[input$ActiveAgArea]]
 			IArea <-  fd[[input$ImpervArea]]
 			WArea <-  fd[[input$WetlandsArea]]
+		# ADD NEW UIOUTPUTS
+		
 		# Build the NLM modelusing user loaded spatial data (areas from .csv)
 		# Parameter mapping...
 		# UI controlled parameters
