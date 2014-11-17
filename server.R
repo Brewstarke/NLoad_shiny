@@ -15,6 +15,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(rjson)
 
+
 # Shiny Server ------------------------------------------------------------------
 shinyServer( # this will be run each time a user changes something.
 	function(input, output) {
@@ -166,19 +167,19 @@ shinyServer( # this will be run each time a user changes something.
 		if (is.null(filedata())) return(NULL)
 			selectInput("ParkArea", "Park Area (ha):", mappingNames(), selected = mappingNames()[12]) # inputID links to the /scratchspace.R input list at top.
 		})
-# uiOutput("Resd>200m"),
+	# uiOutput("ResdGT200m"),
 	output$ResdGT200ms <- renderUI({
 		if (is.null(filedata())) return(NULL)
 			selectInput("ResdGT200m", "No. of Residences located greater than 200m from the water:", mappingNames(), selected = mappingNames()[13]) # inputID links to the /scratchspace.R input list at top.
 	})
 	
-# uiOutput("Resd<200ms"),
+	# uiOutput("ResdLT200ms"),
 	output$ResdLT200ms <- renderUI({
 		if (is.null(filedata())) return(NULL)
 		selectInput("ResdLT200m", "No. of Residences located less than 200m from the water:", mappingNames(), selected = mappingNames()[14]) # inputID links to the /scratchspace.R input list at top.
 	})
 
-# uiOutput("persperhomes")
+	# uiOutput("persperhomes")
 	output$persperhomes <- renderUI({
 		if (is.null(filedata())) return(NULL)
 		selectInput("perperhome", "Average number of people per home:", mappingNames(), selected = mappingNames()[15]) # inputID links to the /scratchspace.R input list at top.
@@ -234,18 +235,15 @@ shinyServer( # this will be run each time a user changes something.
 			
 		
 # ----
-# User loaded spatial paramters (areas) 
+# User loaded spatial paramters (areas) and population paramters/estimates
 #- Read in on first tab and mapped out with uiOutput-renderOutput functions.
 # fd == dataframe that is loaded in by user
 # input$xxx == the column name of dataframe that is mapped to parameter XX. 
-
-## These inputs are passing NULLs- need to fix this!!		
-# target <- reactive({toString(input$value)}) suggested by Rhamath V
 	NLMout <- reactive({
 		if (is.null(filedata())) return(NULL)
 			
 		fd <- data.frame(filedata())
-	
+			# assigns vector from dataframe (column) to parameter which will coerce forumlas to vector outputs and dataframes
 			SiteNames <- fd[[input$Site]]
 			TArea <-  fd[[input$TurfArea]]
 			NVArea <-  fd[[input$NatVegArea]]
@@ -256,8 +254,9 @@ shinyServer( # this will be run each time a user changes something.
 			AAArea <-  fd[[input$ActiveAgArea]]
 			IArea <-  fd[[input$ImpervArea]]
 			WArea <-  fd[[input$WetlandsArea]]
-		# ADD NEW UIOUTPUTS
-		
+			ResGT <- fd[[input$ResdGT200m]]
+			ResLT <- fd[[input$ResdLT200m]]
+			Persons <- fd[[input$perperhome]]
 		# Build the NLM modelusing user loaded spatial data (areas from .csv)
 		# Parameter mapping...
 		# UI controlled parameters
@@ -277,14 +276,12 @@ shinyServer( # this will be run each time a user changes something.
 			FertAg <- input$FertAg
 		# Septic and Cesspools  
 			HL <- input$HumanLoad 
-			HSize <- input$HouseSize
-			NHS <- input$NumbHomesSeptic
 			WTWet <- 12
-			# 			input$NotLostSpetic
-			# 			input$NotLostLeach
-			# 			input$NotLostPlume
-			# 			input$NotLostAquifer
-		
+			NTS <- input$NtransFromSpeticTank
+			NTL <- input$NTransLeach
+			NTP <- input$NtransPlume
+			NTA <- input$NtransAquifer
+			PercCess <- input$percentCesspools
 			# Create blank object to store output
 			NLM <- NULL
 			NLM$Sites <- (SiteNames)	  
@@ -319,11 +316,8 @@ shinyServer( # this will be run each time a user changes something.
 			#j
 			NLM$SurfaceLoad <- ((NLM$TotalLoadAtmospheric + NLM$TotalFertLoad) * 0.39 * 0.65) %>% round(1)
 			#k
-#			NLM$SepticLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesSeptic * input$NotLostSpetic * input$NotLostLeach * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
-			#l
-#			NLM$CesspoolLoad <- (input$HumanLoad * input$HouseSize * input$NumbHomesCess * input$NotLostSpetic * input$NotLostPlume * input$NotLostAquifer) %>% round(1)
-			#m
-##			NLM$WasteWaterLoad <- (input$AvgAnSTPLoad * input$TotAnFlow) %>% round(1)
+			NLM$SepticLoad <- ((1-PercCess) * HL * (ResGT * Persons) * NTS * NTL * NTP * NTA) + ((1-PercCess) * HL * (ResLT * Persons) * NTS * NTL * NTP * NTA)
+			NLM$CesspoolLoad <- (PercCess * HL* (ResGT * Persons) * NTS * NTP * NTA) + (PercCess * HL* (ResLT * Persons) * NTS * NTP * NTA)
 # Total Nitrogen Loading to Estuary --------------------------------------------
 #			NLM$NLoadTotal <- (NLM$SurfaceLoad + NLM$SepticLoad + NLM$CesspoolLoad + NLM$WasteWaterLoad) 
 		
