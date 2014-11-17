@@ -7,17 +7,14 @@
 # 	[TDN]:
 # 		Ave Annual Rainfall:
 # 		Wet to Total Deposition Factor:
-# 	% atmos N transported from wetlands
-# 	% atmos N transported from freshwater ponds
-# 	% atmos N transported from Nat'l Veg Soils:
-# 	% atmos N transported from Turf Soils:
-# 	% atmos N transported from Agr. Soils:
+
+
 # 	Median Home Size:
 # 	No of stories/home:
 # 	House footprint area:
 # 	Average area of roof:
 # 	Average area of driveway:
-# 	% atmos N transported from Impervious Soils (roof/driveway):
+
 # 	Fertilizer N applied to lawns:
 # 	Fertilizer N applied to agriculture:
 # 	Fertilizer N applied to rec/golf courses:
@@ -47,7 +44,7 @@ library(rCharts)
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
-library(rjson)
+
 
 
 shinyUI(navbarPage("N-Load",
@@ -88,47 +85,47 @@ shinyUI(navbarPage("N-Load",
 		 fluidRow(
 		 	column(3,
 		 	   h4("Direct Application of fertilizers"),
-		 	       sliderInput("PercentHomes",
-		 	       	    "% of homes that use fertilizer",
-		 	       	    min = 0.00, max = 1.00, value = 0.49),
-		 	   sliderInput("FertLawns",
-		 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
-		 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
-		 	   sliderInput("FertAg", 
-		 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
-		 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
-# 	 	 	   sliderInput("FertVineyards", 
-# 	 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
-# 	 	 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
-		 	   sliderInput("FertRec", 
-		 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
-		 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
+			 	   sliderInput("PercentHomes",
+			 	       	    "% of homes that use fertilizer",
+			 	       	    min = 0.00, max = 1.00, value = 0.49),
+			 	   sliderInput("FertLawns",
+			 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
+			 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
+			 	   sliderInput("FertAg", 
+			 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
+			 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
+#	 	 	 	   sliderInput("FertVineyards", 
+# 		 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
+# 	 		 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
+			 	   sliderInput("FertRec", 
+			 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
+			 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
 		 	   h4("Septic System & Cesspool Efficiencies"),
 				sliderInput("percentCesspools",
 					     "Precent of onsite wastewater systems that are cesspools",
-					     min = 0.00, max = 0.00, value= .30),
+					     min = 0.00, max = 1.00, value= .30),
 		 	  	numericInput("HumanLoad",
-		 	   	     "Human N released per year (kg??)", #Need to confirm units
-		 	   	     min = 0.00, max = 10.00, value = 4.80),
-		 	      sliderInput("NotLostSpetic",
-		 	       	    "% NOT lost in septic tank",
-		 	       	    min= 0.00, max = 1.00, value = 0.94),
-		 	       sliderInput("NotLostLeach",
-		 	       	    "% NOT lost in leaching fields",
-		 	       	    min = 0.00, max = 1.00, value = 0.65),
-		 	       sliderInput("NotLostPlume",
-		 	       	    "% NOT lost in septic plume",
-		 	       	    min = 0.00, max = 1.00, value = 0.66),
-		 	       sliderInput("NotLostAquifer",
-		 	       	    "% NOT lost in aquifer",
-		 	       	    min = 0.00, max = 1.00, value = 0.65),
+		 	   	 	    "Human N released per year (kg??)", #Need to confirm units
+		 	   	  	   min = 0.00, max = 10.00, value = 4.80),
+		 	      	sliderInput("NtransFromSpeticTank",
+		 	       	  	  "% Nitrogen transported from septic tank",
+		 	       	  	  min= 0.00, max = 1.00, value = 0.94),
+		 	       	sliderInput("NTransLeach",
+		 	       	  	  "% Nitrogen transported through leaching fields",
+		 	       	  	  min = 0.00, max = 1.00, value = 0.65),
+		 	       sliderInput("NtransPlume",
+		 	       	  	  "% Nitrogen transported through septic plume",
+		 	       	   	 min = 0.00, max = 1.00, value = 0.66),
+		 	       sliderInput("NtransAquifer",
+		 	       	   	 "% Nitrogen transported from aquifer",
+		 	       	   	 min = 0.00, max = 1.00, value = 0.65),
 		 	   h4("Sewage Treatment Plant Efficiencies"),
 		 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
-		 	       	    "Average annual wastewater N concentration (kg N/L)",
-		 	       	    min = 0, max = 1000, value = 100),
+		 	       		    "Average annual wastewater N concentration (kg N/L)",
+		 	       	 	   min = 0, max = 1000, value = 100),
 		 	       sliderInput("TotAnFlow",   # need to reformat- numbers too large
-		 	       	    "Total average annual flow (L)",
-		 	       	    min = 0, max = 1000000000, value = 500000, step = 1000)
+		 	       		    "Total average annual flow (L)",
+		 	       	 	   min = 0, max = 1000000000, value = 500000, step = 1000)
 		 	       ),
 		 	column(9,
 		 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario")
@@ -142,21 +139,27 @@ navbarMenu("Additional Model Parameters",
 	   	 	column(3,
 	   	 	       h4("Atmospheric Loading Parameters"),
 	   	 	       h6("...insert some commentary on what these parameters mean and do..."),
+				# 	% atmos N transported from Nat'l Veg Soils:
 	   	 	       sliderInput("AtmNtransNatVeg",
 	   	 	       	    "% atmos N transported from Nat'l Veg Soils:",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.35),
+				# 	% atmos N transported from Turf Soils:
 	   	 	       sliderInput("AtmNtransTurf",
 	   	 	       	    "% atmos N transported from Turf Soils::",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+	   	 	       # 	% atmos N transported from Agr. Soils:
 	   	 	       sliderInput("AtmNtransAg",
 	   	 	       	    "% atmos N transported from Agr. Soils:",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
-	   	 	       sliderInput("NtransWetlands",
+	   	 	       # 	% atmos N transported from wetlands
+	   	 	       sliderInput("NtransWetlands", 
 	   	 	       	    "% atmos N transported from wetlands:",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+	   	 	       # 	% atmos N transported from freshwater ponds
 	   	 	       sliderInput("NtransPonds",
 	   	 	       	    "% atmos N transported from freshwater ponds:",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+				# 	% atmos N transported from Impervious Soils (roof/driveway): ***********************
 	   	 	       sliderInput("AtmNtransImperv", # NLM oysterbay spreadsheet does not use this...
 	   	 	       	    "% atmos N transported from Impervious Soils (roof/driveway):",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
