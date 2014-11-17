@@ -260,64 +260,66 @@ shinyServer( # this will be run each time a user changes something.
 		# Build the NLM modelusing user loaded spatial data (areas from .csv)
 		# Parameter mapping...
 		# UI controlled parameters
-			TDN <- input$AtmDepRate
-			ANTNV <- input$AtmNtransNatVeg
-			ATAg <- input$AtmNtransAg
-			ATImp <- input$AtmNtransImperv
-			TAP <- input$ThroughAquiferPonds
-			FAgTran <- input$FertTransAg
-			FRecTran <- input$FertTransRec
-			TranT <- input$FertTransTurf
-		# Fertilizer Loads
-			FertL <- input$FertLawns
-			FertPerc <- input$PercentHomes
-			DNit <- input$DeNit
-			FertG <- input$FertRec
-			FertAg <- input$FertAg
-		# Septic and Cesspools  
-			HL <- input$HumanLoad 
-			WTWet <- 12
-			NTS <- input$NtransFromSpeticTank
-			NTL <- input$NTransLeach
-			NTP <- input$NtransPlume
-			NTA <- input$NtransAquifer
-			PercCess <- input$percentCesspools
-			# Create blank object to store output
+	## Atmospheric Loading Parameters ##-- A22:A35 in spreadsheet- a few unused parameters dropped
+		TDN <- input$AtmDepRate
+		WTWet <- input$AtmNtransWetlands
+		TAP <- input$AtmNtransPonds
+		ANTNV <- input$AtmNtransNatVeg
+		TAT <- input$AtmNtransTurf
+		ATAg <- input$AtmNtransAg
+		ATImp <- input$AtmNtransImperv #### NOT USED IN NLM OYSTERBAY_COLDSPRING HARBOR ####
+			
+	## Fertilizer Loading Parameters ##-- A36:A43- Dropped average lawn area paramter- using Lawn Area (total land coverage area) from user loaded data
+		FertL <- input$FertLawns
+		FertAg <- input$FertAg
+		FertG <- input$FertRec
+		FertPerc <- input$PercentHomes
+		TranT <- input$FertTransTurf
+		FAgTran <- input$FertTransAg
+		FRecTran <- input$FertTransRec
+		
+	# Septic and Cesspools  Loading Parameters ## -- A44:A50
+		HL <- input$HumanLoad 
+		NTS <- input$NtransFromSpeticTank
+		NTL <- input$NTransLeach
+		NTP <- input$NtransPlume
+		
+		NTV <- input$NtransVadose
+			DNit <- input$DeNit  # NOT SURE THIS IS USED...
+			
+		NTA <- input$NtransAquifer
+		PercCess <- input$percentCesspools
+	# Create blank object to store output
 			NLM <- NULL
 			NLM$Sites <- (SiteNames)	  
 # Atmospheric Loads =============================================================
-			#a -good-
-			AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round(1)
-			#b -good-
-			AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TranT) %>% round(1)
-			#c -good- 
-			AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round(1)
-			#d -good- FOR NOW...
-			AtmImperv <- ((TDN * IArea * ATImp) ) %>% round(1) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
-			#e -good-
-			AtmWetlands <- (TDN * WArea * WTWet) %>% round(1)
-			#f -good-
-			AtmFreshWater <- (TDN * PArea * TAP) %>% round(1)
+			AtmWetlands <- (TDN * WArea * WTWet) %>% round()
+			AtmFreshWater <- (TDN * PArea * TAP) %>% round()
+			AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round()
+			AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TAT) %>% round()
+			AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round()
+			AtmImperv <- ((TDN * IArea * ATImp) ) %>% round() #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+				
 	## Total N load to estuary sourced from Atmospheric Deposition
-			NLM$TotalLoadAtmospheric <- (AtmNatVeg + AtmTurfRec + AtmAg + AtmImperv + AtmWetlands + AtmFreshWater) %>% round(1)
+			NLM$TotalLoadAtmospheric <- (AtmWetlands + AtmFreshWater + AtmNatVeg + AtmTurfRec + AtmAg + AtmImperv) * NTV * NTA %>% round()
 			
 # Fertilizer Application Loads ===================================================		
 			#g
-			FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round(1)
+			FertTurf <- (FertL * LArea * FertPerc * TranT) %>% round()
 			#ActiveAg- new to the NLM_Oyster Bay Spreadsheet
 			#h 	Is this Active Ag only? Need to find out and/or add actvie ag.
-			FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round(1)
+			FertActiveAg <- (FertAg * FAgTran * AAArea) %>% round()
 			#i
-			FertGolf <- (FertG * RArea * FRecTran) %>% round(1)
-			FertParks <- (FertG * FRecTran * PArea) %>% round(1)
+			FertGolf <- (FertG * RArea * FRecTran) %>% round()
+			FertParks <- (FertG * FRecTran * PArea) %>% round()
 # Total Fertilixation Load
-			NLM$TotalFertLoad <- (FertTurf + FertActiveAg + FertGolf + FertParks) %>% round(1)
+			NLM$TotalFertLoad <- (FertTurf + FertActiveAg + FertGolf + FertParks) * NTV * NTA %>% round()
 # Surface Loads- Fertilizer and Deposition ------------------------------------
 			#j
-			NLM$SurfaceLoad <- ((NLM$TotalLoadAtmospheric + NLM$TotalFertLoad) * 0.39 * 0.65) %>% round(1)
+			NLM$SurfaceLoad <- ((NLM$TotalLoadAtmospheric + NLM$TotalFertLoad) * 0.39 * 0.65) %>% round()
 			#k
-			NLM$SepticLoad <- ((1-PercCess) * HL * (ResGT * Persons) * NTS * NTL * NTP * NTA) + ((1-PercCess) * HL * (ResLT * Persons) * NTS * NTL * NTP * NTA)
-			NLM$CesspoolLoad <- (PercCess * HL* (ResGT * Persons) * NTS * NTP * NTA) + (PercCess * HL* (ResLT * Persons) * NTS * NTP * NTA)
+			NLM$SepticLoad <- ((1-PercCess) * HL * (ResGT * Persons) * NTS * NTL * NTP * NTA) + ((1-PercCess) * HL * (ResLT * Persons) * NTS * NTL * NTP * NTA) %>% round()
+			NLM$CesspoolLoad <- (PercCess * HL* (ResGT * Persons) * NTS * NTP * NTA) + (PercCess * HL* (ResLT * Persons) * NTS * NTP * NTA) %>% round()
 # Total Nitrogen Loading to Estuary --------------------------------------------
 #			NLM$NLoadTotal <- (NLM$SurfaceLoad + NLM$SepticLoad + NLM$CesspoolLoad + NLM$WasteWaterLoad) 
 		
@@ -332,7 +334,16 @@ shinyServer( # this will be run each time a user changes something.
 		if(is.null(filedata())){
 			return("Load data to see ouputs")
 		}
-		NLMout()
+		NLMAtm <- NLMout()
+		NLMAtm[,1:2]
+	})
+# Fertilizer and wastewater load table for UI paramter page
+	output$NLMwwfertloads <- renderDataTable({
+		if(is.null(filedata())){
+			return("Load data to see ouputs")
+		}
+		NLMwwfert <- NLMout()
+		NLMwwfert[,c(1,3,5,6)]
 	})
 
 # Start of NLoad outputs----

@@ -113,12 +113,12 @@ shinyUI(navbarPage("N-Load",
 		 	       	sliderInput("NTransLeach",
 		 	       	  	  "% Nitrogen transported through leaching fields",
 		 	       	  	  min = 0.00, max = 1.00, value = 0.65),
-		 	       sliderInput("NtransPlume",
+		 	       	sliderInput("NtransPlume",
 		 	       	  	  "% Nitrogen transported through septic plume",
 		 	       	   	 min = 0.00, max = 1.00, value = 0.66),
-		 	       sliderInput("NtransAquifer",
-		 	       	   	 "% Nitrogen transported from aquifer",
-		 	       	   	 min = 0.00, max = 1.00, value = 0.65),
+				sliderInput("NtransAquifer", 
+					    "% Watershed Nitrogen transported from the aquifer",
+					    min = 0.00, max = 1.00, value = 0.85, round = FALSE, step = 0.1),
 		 	   h4("Sewage Treatment Plant Efficiencies"),
 		 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
 		 	       		    "Average annual wastewater N concentration (kg N/L)",
@@ -128,7 +128,8 @@ shinyUI(navbarPage("N-Load",
 		 	       	 	   min = 0, max = 1000000000, value = 500000, step = 1000)
 		 	       ),
 		 	column(9,
-		 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario")
+		 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario"),
+		 	       dataTableOutput(outputId = "NLMwwfertloads")
 		 	       )
 		 	)
 		  ),
@@ -152,9 +153,9 @@ navbarMenu("Additional Model Parameters",
 	   	 	       	    "% atmos N transported from Agr. Soils:",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
 	   	 	       # 	% atmos N transported from wetlands
-	   	 	       sliderInput("NtransWetlands", 
-	   	 	       	    "% atmos N transported from wetlands:",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+				sliderInput("AtmNtransWetlands",
+					    "% Atmospheric Nitrogen transported from wetlands",
+					    min = 0.00, max = 1.00, value= 0.22),
 	   	 	       # 	% atmos N transported from freshwater ponds
 	   	 	       sliderInput("NtransPonds",
 	   	 	       	    "% atmos N transported from freshwater ponds:",
@@ -163,6 +164,12 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("AtmNtransImperv", # NLM oysterbay spreadsheet does not use this...
 	   	 	       	    "% atmos N transported from Impervious Soils (roof/driveway):",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
+				h5("Throughput to the aquifer"),
+				
+				sliderInput("AtmNtransPonds",
+					    "% Atmospheric Nitrogen transported from freshwater ponds",
+					    min = 0.00, max = 1.00, value = 0.44),
+				
 	   	 	       
 	   	 	       sliderInput("DeNit",
 	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
@@ -181,7 +188,7 @@ navbarMenu("Additional Model Parameters",
 	   	 	column(3, 
 	   	 	       # transportation parameter UI inputs
 	   	 	       
-		   	h4("Fertilizer Transportation and biochemical processes resulting in denitriciation or loss"),
+		   	h4("Fertilizer Transportation"),
 	   	 	       sliderInput("FertTransTurf",
 	   	 	       	    "% N fertilizer transported from turf soils",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
@@ -200,19 +207,13 @@ navbarMenu("Additional Model Parameters",
 	   	 	       sliderInput("FertTransSepticPlume",
 	   	 	       	    "% fertilizer N transported from septic plumes",
 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransVandose",
-	   	 	       	    "% fertilizer N transported from vandose zone",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
+# 	   	 	       sliderInput("FertTransVadose",
+# 	   	 	       	    "% fertilizer N transported from vadose zone",   ### UNUSED IN NLM OYSTERBAY SPREADSHEET
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
 	   	 	       sliderInput("FertTransAquifer",
 	   	 	       	    "% fertilizer N transported from aquifer",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.61),
-	   	 	h5("Throughput to the aquifer"),
-		   	 	sliderInput("ThroughAquiferPonds",
-	   	 	       	    "Throughput to the aquifer from ponds",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.44),
-	   	 	       sliderInput("ThroughAquiferWetlands",
-	   	 	       	    "Throughput to the aquifer from wetlands",
-	   	 	       	    min = 0.00, max = 1.00, value= 0.22)
+	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
+	   	 	
 	   	 		),
 	   	 	column(9,
 	   	 	       h4("Not sure what to put here. Graphic of how this transportation works??")
@@ -227,10 +228,12 @@ navbarMenu("Additional Model Parameters",
 		   	       sliderInput("AtmDepRate",
 		   	       	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
 		   	       	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.1), 
-		   	       
 		   	       sliderInput("HumanExcretion",
 		   	       	    "Per capita human N excretion rate (kg N/pp/yr):",
-		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1)
+		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1),
+		   	       sliderInput("NtransVadose",
+		   	       	    "% Watershed Nitrogen transported from the vadose zone",
+		   	       	    min = 0.00, max = 1.00, value = .39, round= FALSE, step = 0.1)		   	       
 	   			),
 		   	column(9,
 		   	       h4("might not be worth keeping this tab around....")
