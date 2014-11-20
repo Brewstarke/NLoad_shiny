@@ -1,42 +1,10 @@
-
-# From NLM_OysterBay Spreadsheet\
+####
 #
-# 	[Rainfall nitrate]:
-# 		[Rainfall ammonia]:
-# 		[Rainfall dissolved organic N]:
-# 	[TDN]:
-# 		Ave Annual Rainfall:
-# 		Wet to Total Deposition Factor:
-
-
-# 	Median Home Size:
-# 	No of stories/home:
-# 	House footprint area:
-# 	Average area of roof:
-# 	Average area of driveway:
-
-# 	Fertilizer N applied to lawns:
-# 	Fertilizer N applied to agriculture:
-# 	Fertilizer N applied to rec/golf courses:
-# 	Average lawn area:
-# 	% of homes that use fertilizer:
-# 	% of fertilizer N transported from Turf Soils:
-# 	% of fertilizer N transported from Agri Soils:
-# 	% of fertilizer N transported from Rec. Soils:
-# 	Per capita human N excretion rate:
-# 	People per house:
-# 	% N transported from septic tank
-# 	%N transported through leaching field
-# 	% waste transported from septic plumes:
-# 	% watershed N transported from vadose zone:
-# 	% N transported from aquifer:
-# 	# of houses in high density residential areas:
-# 	# of houses in medium-high density residential areas:
-# 	# of houses in medium density residential areas:
-# 	# of houses in medium-low density residential areas:
-# 	# of houses in low density residential areas:
-# 	percent of onsite wastewater systems that are cesspools
-
+#  ui.R Shiny App
+#
+# NLM model 
+#
+####
 
 library(shiny)
 library(reshape2)
@@ -46,15 +14,13 @@ library(ggplot2)
 library(RColorBrewer)
 
 
-
 shinyUI(navbarPage("N-Load",
-		   #theme("bootstrap.css",
 # Data Loading Tab ---- 
 	tabPanel("Data Loading", 
 	    fluidRow(
-	    	tags$h3("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
+	    	h4("MODEL RESULTS NOT ACCURATE - MODIFICATION NEEDED"),
 	    	column(2,
-	    	       h3("Load in data file here:"),
+	    	       h5("Load in land use and population data as a .csv file here:"),
 	    	       fileInput('datafile', 'Choose CSV file',
 	    	       	  accept=c('text/csv', 'text/comma-separated-values,text/plain')),
 	    	       uiOutput("Sites"),
@@ -73,9 +39,10 @@ shinyUI(navbarPage("N-Load",
 	    	       uiOutput("persperhomes")
 	    	       
 	    	), ## Can add 'conditionPanel()' to allow for extra data/parameter mapping options or NLoad options.
-	    	column(8,
-	    	       h4("Geographic Paramters read in by user"),
+	    	column(9,
+	    	       h5("User provided paramters used as NLM model inputs"),
 	    	       dataTableOutput("filetable"),
+	    	       h5("NLM Outputs as kgN/ha"),
 	    	       dataTableOutput("filetable2")
 	    	       )
 		    )
@@ -83,43 +50,43 @@ shinyUI(navbarPage("N-Load",
 # Wastewater Parameters ----
 	tabPanel("Direct Human Inputs",
 		 fluidRow(
-		 	column(3,
-		 	   h4("Direct Application of fertilizers"),
-			 	   sliderInput("PercentHomes",
+		 	column(4,
+		 	   h5("Direct Application of fertilizers"),
+			 	   sliderInput("PercentHomes", # good 49%
 			 	       	    "% of homes that use fertilizer",
-			 	       	    min = 0.00, max = 1.00, value = 0.49),
-			 	   sliderInput("FertLawns",
+			 	       	    min = 0.00, max = 1.00, value = 0.49, step = 0.05, ticks = FALSE),
+			 	   sliderInput("FertLawns", # good- 122 - was 105
 			 	   	    "Nitrogen from fertilizer applied to lawns (kg N/ha):",
-			 	   	    min= 50, max= 150, value= 104, ticks= FALSE),
-			 	   sliderInput("FertAg", 
+			 	   	    min= 0, max= 250, value= 122, ticks= FALSE),
+			 	   sliderInput("FertAg", # good- 136 
 			 	   	    "Nitrogen from fertilizer applied to agricultural lands (kg N/ha):",
-			 	   	    min= 50, max= 150, value= 136, ticks= FALSE),
+			 	   	    min= 0, max= 250, value= 136, ticks= TRUE),
 #	 	 	 	   sliderInput("FertVineyards", 
 # 		 	 	   	    "Nitrogen from fertilizer applied to vineyards (kg N/ha):",
 # 	 		 	   	    min= 0, max= 20, value= 8.41, ticks= FALSE),
-			 	   sliderInput("FertRec", 
+			 	   sliderInput("FertRec", # good 146  -- was 115
 			 	   	    "Nitrogen from fertilizer applied to golf courses and recreational lands (kg N/ha):",
-			 	   	    min= 0, max= 200, value= 115, ticks= FALSE),
-		 	   h4("Septic System & Cesspool Efficiencies"),
-				sliderInput("percentCesspools",
+			 	   	    min= 0, max= 250, value= 146, ticks= FALSE),
+		 	   h5("Septic System & Cesspool Efficiencies"),
+				sliderInput("percentCesspools", # good 53%  -- was 32%
 					     "Precent of onsite wastewater systems that are cesspools",
-					     min = 0.00, max = 1.00, value= .30),
-		 	  	numericInput("HumanLoad",
-		 	   	 	    "Human N released per year (kg??)", #Need to confirm units
-		 	   	  	   min = 0.00, max = 10.00, value = 4.80),
-		 	      	sliderInput("NtransFromSpeticTank",
+					     min = 0.00, max = 1.00, value= .53),
+		 	  	sliderInput("HumanLoad", # good 4.8  
+		 	   	 	    "Human N released per year (kg N/pp/yr)", 
+		 	   	  	   min = 0.0, max = 10.0, value = 4.8, round = FALSE, step = 0.1),
+		 	      	sliderInput("NtransFromSpeticTank",  # good- 93% was 94%
 		 	       	  	  "% Nitrogen transported from septic tank",
-		 	       	  	  min= 0.00, max = 1.00, value = 0.94),
-		 	       	sliderInput("NTransLeach",
+		 	       	  	  min= 0.00, max = 1.00, value = 0.93, round = FALSE, step = 0.01),
+		 	       	sliderInput("NTransLeach", # good- 95% was 65%
 		 	       	  	  "% Nitrogen transported through leaching fields",
-		 	       	  	  min = 0.00, max = 1.00, value = 0.65),
-		 	       	sliderInput("NtransPlume",
-		 	       	  	  "% Nitrogen transported through septic plume",
-		 	       	   	 min = 0.00, max = 1.00, value = 0.66),
-				sliderInput("NtransAquifer", 
+		 	       	  	  min = 0.00, max = 1.00, value = 0.95, round = FALSE, step = 0.01),
+		 	       	sliderInput("NtransPlume",  #good 95% was 65%
+		 	       	  	  "% waste transported from septic plume",
+		 	       	   	 min = 0.00, max = 1.00, value = 0.95, round = FALSE, step = 0.01),
+				sliderInput("NtransAquifer",  # good 85%
 					    "% Watershed Nitrogen transported from the aquifer",
-					    min = 0.00, max = 1.00, value = 0.85, round = FALSE, step = 0.1),
-		 	   h4("Sewage Treatment Plant Efficiencies"),
+					    min = 0.00, max = 1.00, value = 0.85, round = FALSE, step = 0.01),
+		 	   h5("Sewage Treatment Plant Efficiencies"),
 		 	       sliderInput("AvgAnSTPLoad",  # Need to get an idea of range-- Maybe add another control for modifying the 'efficiency' of a STP for running scenarios.
 		 	       		    "Average annual wastewater N concentration (kg N/L)",
 		 	       	 	   min = 0, max = 1000, value = 100),
@@ -127,7 +94,7 @@ shinyUI(navbarPage("N-Load",
 		 	       		    "Total average annual flow (L)",
 		 	       	 	   min = 0, max = 1000000000, value = 500000, step = 1000)
 		 	       ),
-		 	column(9,
+		 	column(8,
 		 	       h4("Insert a plot of fertilizer loadings and septic? Again, facet on subestuary or scenario"),
 		 	       dataTableOutput(outputId = "NLMwwfertloads")
 		 	       )
@@ -140,44 +107,38 @@ navbarMenu("Additional Model Parameters",
 	   	 	column(3,
 	   	 	       h4("Atmospheric Loading Parameters"),
 	   	 	       h6("...insert some commentary on what these parameters mean and do..."),
-				# 	% atmos N transported from Nat'l Veg Soils:
-	   	 	       sliderInput("AtmNtransNatVeg",
-	   	 	       	    "% atmos N transported from Nat'l Veg Soils:",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.35),
-				# 	% atmos N transported from Turf Soils:
-	   	 	       sliderInput("AtmNtransTurf",
-	   	 	       	    "% atmos N transported from Turf Soils::",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
-	   	 	       # 	% atmos N transported from Agr. Soils:
-	   	 	       sliderInput("AtmNtransAg",
-	   	 	       	    "% atmos N transported from Agr. Soils:",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
-	   	 	       # 	% atmos N transported from wetlands
-				sliderInput("AtmNtransWetlands",
-					    "% Atmospheric Nitrogen transported from wetlands",
-					    min = 0.00, max = 1.00, value= 0.22),
-	   	 	       # 	% atmos N transported from freshwater ponds
-	   	 	       sliderInput("NtransPonds",
+    	       # 	% atmos N transported from wetlands
+	   	 	       sliderInput("AtmNtransWetlands", #good
+	   	 	       	    "% Atmospheric Nitrogen transported from wetlands",
+	   	 	       	    min = 0.00, max = 1.00, value= 0.22, round = FALSE, step = 0.01),
+	       # 	% atmos N transported from freshwater ponds
+	   	 	       sliderInput("AtmNtransPonds", # good
 	   	 	       	    "% atmos N transported from freshwater ponds:",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
-				# 	% atmos N transported from Impervious Soils (roof/driveway): ***********************
-	   	 	       sliderInput("AtmNtransImperv", # NLM oysterbay spreadsheet does not use this...
+	   	 	       	    min = 0.00, max = 1.00, value = 0.44, round = FALSE, step = 0.01),
+		# 	% atmos N transported from Nat'l Veg Soils:
+	   	 	       sliderInput("AtmNtransNatVeg", #good
+	   	 	       	    "% atmos N transported from Nat'l Veg Soils:",
+	   	 	       	    min = 0.00, max = 1.00, value = 0.35, round = FALSE, step = 0.01),
+		# 	% atmos N transported from Turf Soils:
+	   	 	       sliderInput("AtmNtransTurf",  #good
+	   	 	       	    "% atmos N transported from Turf Soils::",
+	   	 	       	    min = 0.00, max = 1.00, value = 0.38, round = FALSE, step = 0.01),
+	   	 # 	% atmos N transported from Agr. Soils:
+	   	 	       sliderInput("AtmNtransAg",  #good
+	   	 	       	    "% atmos N transported from Agr. Soils:",
+	   	 	       	    min = 0.00, max = 1.00, value = 0.38, round = FALSE, step = 0.01),
+		# 	% atmos N transported from Impervious Soils (roof/driveway): *********   ### NLM oysterbay spreadsheet does not use this...
+	   	 	       sliderInput("AtmNtransImperv",  # good though not used...
 	   	 	       	    "% atmos N transported from Impervious Soils (roof/driveway):",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.38),
-				h5("Throughput to the aquifer"),
-				
-				sliderInput("AtmNtransPonds",
-					    "% Atmospheric Nitrogen transported from freshwater ponds",
-					    min = 0.00, max = 1.00, value = 0.44),
-				
-	   	 	       
-	   	 	       sliderInput("DeNit",
-	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
-	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
+	   	 	       	    min = 0.00, max = 1.00, value = 0.38, round = FALSE, step = 0.01)
+#				h5("Throughput to the aquifer"),
+# 					   	 	       
+# 	   	 	       sliderInput("DeNit",
+# 	   	 	       	    "% Not lost as gases -- Denitrification?",  ## used one input for g-h-i
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
 	   	 		),
 	   	 	column(9,
-	   	 	       h3("holy smokes"),
-	   	 	       h4("Should add a graphic with the atmospheric loads for each subwater shed (OR MANIPULATION/SCENARIO OF A WATERSHED"),
+	   	 	      h4("Should add a graphic with the atmospheric loads for each subwater shed (OR MANIPULATION/SCENARIO OF A WATERSHED"),
 	   	 	      dataTableOutput(outputId = "NLMtest")
 	   	 	       )
 	   		 )
@@ -188,31 +149,33 @@ navbarMenu("Additional Model Parameters",
 	   	 	column(3, 
 	   	 	       # transportation parameter UI inputs
 	   	 	       
-		   	h4("Fertilizer Transportation"),
-	   	 	       sliderInput("FertTransTurf",
+		   	h4("Fertilizer Transport"),
+		   	h6("Should add some commentary here too, Not sure what these really mean or do..."),
+	   	 	       sliderInput("FertTransTurf",  #good-61%  was 49%
 	   	 	       	    "% N fertilizer transported from turf soils",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransAg",
+	   	 	       	    min = 0.00, max = 1.00, value = 0.61, round = FALSE, step = 0.01),
+	   	 	       sliderInput("FertTransAg", # good- 61% was 49%
 	   	 	       	    "% fertilizer N transported from Agriculture",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransRec",
+	   	 	       	    min = 0.00, max = 1.00, value = 0.61, round = FALSE, step = 0.01),
+	   	 	       sliderInput("FertTransRec", #good 61% was 49%
 	   	 	       	    "% fertilizer N transported from recreational soils",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransSeptic",
-	   	 	       	    "% fertilizer N transported from septic tanks",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransLeach",
-	   	 	       	    "% fertilizer N transported from leaching fields",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransSepticPlume",
-	   	 	       	    "% fertilizer N transported from septic plumes",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
+	   	 	       	    min = 0.00, max = 1.00, value = 0.61, round = FALSE, step = 0.01)
+	   	 	   # THE BELOW SEPTIC-FERTILIZER PARAMETERS ARE NOT USED IN NLM-OYSTERBAY SHEET
+# 		   		sliderInput("FertTransSeptic",
+# 	   	 	       	    "% fertilizer N transported from septic tanks",
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49, round = FALSE, step = 0.01),
+# 	   	 	       sliderInput("FertTransLeach",
+# 	   	 	       	    "% fertilizer N transported from leaching fields",
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49, round = FALSE, step = 0.01),
+# 	   	 	       sliderInput("FertTransSepticPlume",
+# 	   	 	       	    "% fertilizer N transported from septic plumes",
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49, round = FALSE, step = 0.01),
 # 	   	 	       sliderInput("FertTransVadose",
 # 	   	 	       	    "% fertilizer N transported from vadose zone",   ### UNUSED IN NLM OYSTERBAY SPREADSHEET
-# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49),
-	   	 	       sliderInput("FertTransAquifer",
-	   	 	       	    "% fertilizer N transported from aquifer",
-	   	 	       	    min = 0.00, max = 1.00, value = 0.61)
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.49, round = FALSE, step = 0.01),
+# 	   	 	       sliderInput("FertTransAquifer",
+# 	   	 	       	    "% fertilizer N transported from aquifer",
+# 	   	 	       	    min = 0.00, max = 1.00, value = 0.61, round = FALSE, step = 0.01)
 	   	 	
 	   	 		),
 	   	 	column(9,
@@ -225,15 +188,15 @@ navbarMenu("Additional Model Parameters",
 		   fluidRow(
 		   	column(3, 
 		   	       h4("Physical Loading Parameters"),
-		   	       sliderInput("AtmDepRate",
+		   	       sliderInput("AtmDepRate",  # NEED TO CONFIRM THIS NUMBER- USED THE wet and dry combined initially- 15.1kgN/ha/yr
 		   	       	    label= "Atmospheric Deposition Rate (kg N/ha/yr):", 
-		   	       	    min = 12.0, max = 17.0, value = 15.1, round= FALSE, step= 0.1), 
-		   	       sliderInput("HumanExcretion",
-		   	       	    "Per capita human N excretion rate (kg N/pp/yr):",
-		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1),
-		   	       sliderInput("NtransVadose",
+		   	       	    min = 5, max = 20, value = 15.0892, step= .01), 
+# 		   	       sliderInput("HumanExcretion", # NOT USED
+# 		   	       	    "Per capita human N excretion rate (kg N/pp/yr):",
+# 		   	       	    min= 0.0, max= 10.0, value= 4.8, round= FALSE, step= 0.1),
+		   	       sliderInput("NtransVadose", #good - 39%
 		   	       	    "% Watershed Nitrogen transported from the vadose zone",
-		   	       	    min = 0.00, max = 1.00, value = .39, round= FALSE, step = 0.1)		   	       
+		   	       	    min = 0.00, max = 1.00, value = .39, round= FALSE, ticks= FALSE, step = 0.01)		   	       
 	   			),
 		   	column(9,
 		   	       h4("might not be worth keeping this tab around....")
@@ -243,7 +206,7 @@ navbarMenu("Additional Model Parameters",
 	),
 	   
 # Output Summary Tab ----
-tabPanel("Loading Sources",
+tabPanel("Distribution of Loads",
 	 fluidRow(
 	 	column(6,
 	 	       h4("Distribution of N loading by sub-watershed"),
@@ -257,12 +220,11 @@ tabPanel("Loading Sources",
 	 	)
 	),
 # # Output Summary Tab #2 ----
-tabPanel("Distribution of Loads",
+tabPanel("Download Outputs",
 	fluidRow(
 		column(12,
-		       h4("Distribution of N loads to Peconics- Interactive...."),
-		       h5("plot goes here...")
-#		       showOutput("plot", "nvd3")
+		       h4("To save results click 'Down Load' button and browse to folder for saving"),
+		       downloadButton('downloadOutput', label = "Download NLM Outputs")
 		)
 		)
 	)

@@ -254,6 +254,7 @@ shinyServer( # this will be run each time a user changes something.
 			AAArea <-  fd[[input$ActiveAgArea]]
 			IArea <-  fd[[input$ImpervArea]]
 			WArea <-  fd[[input$WetlandsArea]]
+			PondArea <- fd[[input$PondsArea]]
 			ResGT <- fd[[input$ResdGT200m]]
 			ResLT <- fd[[input$ResdLT200m]]
 			Persons <- fd[[input$perperhome]]
@@ -285,7 +286,7 @@ shinyServer( # this will be run each time a user changes something.
 		NTP <- input$NtransPlume
 		
 		NTV <- input$NtransVadose
-			DNit <- input$DeNit  # NOT SURE THIS IS USED...
+#			DNit <- input$DeNit  # NOT SURE THIS IS USED...
 			
 		NTA <- input$NtransAquifer
 		PercCess <- input$percentCesspools
@@ -293,14 +294,14 @@ shinyServer( # this will be run each time a user changes something.
 			NLM <- NULL
 			NLM$Sites <- (SiteNames)	  
 # Atmospheric Loads =============================================================
-			AtmWetlands <- (TDN * WArea * WTWet) %>% round()
-			AtmFreshWater <- (TDN * PArea * TAP) %>% round()
-			AtmNatVeg  <- (TDN * NVArea * ANTNV) %>% round()
-			AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TAT) %>% round()
-			AtmAg <- (TDN * (AArea + AAArea) * ATAg) %>% round()
-			AtmImperv <- ((TDN * IArea * ATImp) ) %>% round() #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
+			AtmWetlands <- (TDN * WArea * WTWet) 
+			AtmFreshWater <- (TDN * PondArea * TAP)
+			AtmNatVeg  <- (TDN * NVArea * ANTNV)
+			AtmTurfRec <- (TDN * (TArea + RArea + LArea + PArea ) * TAT)
+			AtmAg <- (TDN * (AArea + AAArea) * ATAg)
+			AtmImperv <- (TDN * IArea) #Need help with this formula....# NLM Oysterbay spreadsheet does NOT use the inpu$AtmNtransImperv input in formula
 				
-	## Total N load to estuary sourced from Atmospheric Deposition
+## Total N load to estuary sourced from Atmospheric Deposition
 			NLM$TotalLoadAtmospheric <- (AtmWetlands + AtmFreshWater + AtmNatVeg + AtmTurfRec + AtmAg + AtmImperv) * NTV * NTA %>% round()
 			
 # Fertilizer Application Loads ===================================================		
@@ -392,7 +393,14 @@ shinyServer( # this will be run each time a user changes something.
 		return(HSbarPct)
 		
 	})
-	
+
+# Download outputs to .csv file.
+	output$downloadOutput <- downloadHandler(
+		filename = "NLM_shiny_Output.csv",
+		content = function(file){
+			write.csv(NLMout(), file)
+		}
+		)
 # 	output$plot  <- renderChart2({
 # 	
 # 		plot1 <- nPlot(value ~ subwatershed_code,
